@@ -8,8 +8,7 @@
                 <div class="card-header"><a href="{{ route('admin.applicants.index') }}" class="plain-txt">Applicants</a> <span class="plain-txt">/</span> Edit Applicant</div>
 
                 <div class="card-body">
-                    <form metdod="POST" action="{{ route('register') }}">
-                    {{ Form::model($applicant, ['route' => ['admin.applicants.update', $applicant->id], 'metdod' => 'put']) }}
+                    {!! Form::model($applicant, ['route' => ['admin.applicants.update', $applicant->id], 'method' => 'put', 'files' => true, 'id' => 'page-form']) !!}
                         <div class="row mb-3">
                             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
 
@@ -56,7 +55,7 @@
                             <label for="division" class="col-md-4 col-form-label text-md-end">Division</label>
 
                             <div class="col-md-6">
-                                {{ Form::select('division_id', $data['divisions_list'], null, ['id' => 'division', 'class' => 'form-control']) }}
+                                {{ Form::select('division_id', ['' => 'Select Division'] + $data['divisions'], null, ['id' => 'division', 'class' => 'form-control']) }}
 
                                 @error('division_id')
                                     <span class="invalid-feedback" role="alert">
@@ -70,7 +69,7 @@
                             <label for="district" class="col-md-4 col-form-label text-md-end">District</label>
 
                             <div class="col-md-6">
-                                {{ Form::select('district_id', $data['districts_list'], null, ['id' => 'district', 'class' => 'form-control']) }}
+                                {{ Form::select('district_id', ['' => 'Select District'] + $data['districts'], null, ['id' => 'district', 'class' => 'form-control']) }}
 
                                 @error('district_id')
                                     <span class="invalid-feedback" role="alert">
@@ -84,7 +83,7 @@
                             <label for="upazila" class="col-md-4 col-form-label text-md-end">Upazila / tdana</label>
 
                             <div class="col-md-6">
-                                {{ Form::select('upazila_id', $data['upazilas_list'], null, ['id' => 'upazila', 'class' => 'form-control']) }}
+                                {{ Form::select('upazila_id', ['' => 'Select Upazila'] + $data['upazilas'], null, ['id' => 'upazila', 'class' => 'form-control']) }}
 
                                 @error('upazila_id')
                                     <span class="invalid-feedback" role="alert">
@@ -113,21 +112,21 @@
 
                             <div class="col-md-6">
                                 <div class="form-check inline-block">
-                                    <input value="bangla" class="form-check-input" type="checkbox" name="bangla" id="language-bangla" {{ in_array('bangla', $applicant->lang_array) ? 'checked' : '' }}>
+                                    <input value="bangla" class="form-check-input" type="checkbox" name="language[]" id="language-bangla" {{ in_array('bangla', $applicant->lang_array) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="language-bangla">
                                         Bangla
                                     </label>
                                 </div>
 
                                 <div class="form-check inline-block">
-                                    <input value="english" class="form-check-input" type="checkbox" name="english" id="language-english" {{ in_array( 'english', $applicant->lang_array) ? 'checked' : '' }}>
+                                    <input value="english" class="form-check-input" type="checkbox" name="language[]" id="language-english" {{ in_array( 'english', $applicant->lang_array) ? 'checked' : '' }}>
                                         <label class="form-check-label" for="language-english">
                                         English
                                     </label>
                                 </div>
 
                                 <div class="form-check inline-block">
-                                    <input value="french" class="form-check-input" type="checkbox" name="french" id="language-french" {{ in_array('french', $applicant->lang_array) ? 'checked' : '' }}>
+                                    <input value="french" class="form-check-input" type="checkbox" name="language[]" id="language-french" {{ in_array('french', $applicant->lang_array) ? 'checked' : '' }}>
                                         <label class="form-check-label" for="language-french">
                                         French
                                     </label>
@@ -145,7 +144,7 @@
                             <label for="education" class="col-md-4 col-form-label text-md-end">Education Qualification</label>
 
                             <div class="col-md-6">
-                                <table class="table">
+                                <table id="exam-table" class="table">
                                     <tr>
                                         <td style="min-width: 130px;">Exam Name</td>
                                         <td style="width: 200px;">Board/University</td>
@@ -170,7 +169,7 @@
                                             {{ Form::text('result[]', null, ['class' => 'form-control']) }}
                                         </td>
                                         <td>
-                                            <button class="btn btn-light btn-sm">X</button>
+                                            <button class="btn btn-light btn-sm" disabled>X</button>
                                         </td>
                                     </tr>
 
@@ -191,14 +190,14 @@
                                             {{ Form::text('result[]', null, ['class' => 'form-control']) }}
                                         </td>
                                         <td>
-                                            <button class="btn btn-light btn-sm">X</button>
+                                            <button class="btn btn-light btn-sm" disabled>X</button>
                                         </td>
                                     </tr>
                                 </table>
 
                                 {{ Form::select('board', $data['boards_list'], null, ['id' => 'board', 'class' => 'd-none']) }}
                                 {{ Form::select('university', $data['universities_list'], null, ['id' => 'university', 'class' => 'd-none']) }}
-                                <p class="text-end"><button class="btn btn-light btn-sm">Add More..</button></p>
+                                <p class="text-end add-more" data-table="exam-table"><button class="btn btn-light btn-sm">Add More..</button></p>
 
                                 @error('education')
                                     <span class="invalid-feedback" role="alert">
@@ -241,7 +240,7 @@
                                 </div>
 
                                 <div id="training-container" class="{{ $applicant->is_trained ?: 'none'}}">
-                                    <table class="table">
+                                    <table id="training-table" class="table">
                                         <tr>
                                             <td>Training Name</td>
                                             <td>Training Details</td>
@@ -256,12 +255,12 @@
                                                 {{ Form::text('training_details[]', null, ['class' => 'form-control']) }}
                                             </td>
                                             <td>
-                                                <button class="btn btn-light btn-sm">X</button>
+                                                <button class="btn btn-light btn-sm" disabled>X</button>
                                             </td>
                                         </tr>
                                     </table>
 
-                                    <p class="text-end"><button class="btn btn-light btn-sm">Add More..</button></p>
+                                    <p class="text-end add-more" data-table="training-table"><button class="btn btn-light btn-sm">Add More..</button></p>
                                 </div> <!-- .table-container -->
 
                                 @error('training')
@@ -274,7 +273,7 @@
 
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="submit btn btn-primary">
                                     Update
                                 </button>
 

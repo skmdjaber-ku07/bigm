@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Library\BdGeo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -39,6 +40,30 @@ class Applicant extends Model
         'insert_date',
         'action',
     ];
+
+    /**
+     * Applicant form validation.
+     *
+     * @param array $data
+     *
+     * @return \Illuminate\Validation\Validator
+     */
+    public static function validate($data)
+    {
+        return validator($data, [
+            'name' => 'required',
+            'email' => 'required|email',
+            'division_id' => 'required|in:' . BdGeo::getCommaSeparatedIds('divisions'),
+            'district_id' => 'required|in:' . BdGeo::getCommaSeparatedIds('districts', [$data['division_id']]),
+            'upazila_id' => 'required|in:' . BdGeo::getCommaSeparatedIds('upazilas', [$data['district_id']]),
+            'address_details' => 'required',
+            'language' => 'array|in:bangla,english,french',
+            'exam' => 'required|array|exists:exams,id',
+            'institute' => 'required|array',
+            'photo' => 'image|mimetypes:image/webp,image/jpeg,image/png,image/jpg,image/gif|max:3072',
+            'cv' => 'mimes:doc,pdf|max:3072',
+        ]);
+    }
 
     /**
      * Get applicant's name

@@ -25,6 +25,14 @@ return new class extends Migration
             $table->string('cv')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('applicant_exam', function (Blueprint $table) {
+            $table->unsignedBigInteger('applicant_id');
+            $table->unsignedBigInteger('exam_id');
+            $table->morphs('institute');
+            $table->float('result', 8, 2)->unsigned();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -35,5 +43,7 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('applicants');
+
+        Schema::dropIfExists('applicant_exam');
     }
 };

@@ -52,20 +52,7 @@ class AdminApplicantController extends Controller
      */
     public function edit(Applicant $applicant)
     {
-        $data['divisions_list'] = BdGeo::getDivisions()
-                                       ->pluck('name', 'id')
-                                       ->prepend('Select Division', '');
-
-        $data['districts_list'] = BdGeo::getDistricts()
-                                       ->whereIn('division_id', [$applicant->division_id])
-                                       ->pluck('name', 'id')
-                                       ->prepend('Select District', '');
-
-        $data['upazilas_list'] = BdGeo::getUpazilas()
-                                      ->whereIn('district_id', [$applicant->district_id])
-                                      ->pluck('name', 'id')
-                                      ->prepend('Select Upazila', '');
-
+        $data = BdGeo::getIdNameList($applicant);
         $data['exams_list'] = Exam::select('name', 'id', 'level')->get();
         $data['boards_list'] = Board::pluck('name', 'id')->prepend('Select Board', '');
         $data['universities_list'] = University::pluck('name', 'id')->prepend('Select University', '');
@@ -82,7 +69,80 @@ class AdminApplicantController extends Controller
      */
     public function update(Request $request, Applicant $applicant)
     {
-        //
+        $validation = Applicant::validate($request->all());
+
+        // Update posted data if validation passes.
+        if ($validation->passes()) {
+            // Exam and Trainings Validation
+
+
+            $applicant->user()->update([
+                'name' => $request->name,
+                'email' => $request->email,
+            ]);
+
+            $geo_list = BdGeo::getIdNameList();
+
+            $applicant->update([
+                'division' => json_encode([
+                    'id' => $request->division_id,
+                    'name' => $geo_list['divisions'][(int) $request->division_id],
+                ]),
+                'district' => json_encode([
+                    'id' => $request->district_id,
+                    'name' => $geo_list['districts'][(int) $request->district_id],
+                ]),
+                'upazila' => json_encode([
+                    'id' => $request->upazila_id,
+                    'name' => $geo_list['upazilas'][(int) $request->upazila_id],
+                ]),
+                'address_details' => $request->address_details,
+                'language' => json_encode($request->language),
+            ]);
+
+            if (count($request->exam)) {
+                $applicant->exams()->delete();
+
+                foreach ($request->exam as $index => $exam_id) {
+                    $exam = Exam::find($exam_id);
+
+                    if (isset($exam)) {
+                        $institute = \DB::table($exam->level . 's')
+                                        ->whereId($request->institute[$index])
+                                        ->first();
+
+                        if (isset($institute)
+                            && is_array($request->result)
+                            && array_key_exists($index, $request->result)
+                            && is_numeric($request->result[$index])
+                        ) {
+                            $applicant->exams()->attach($exam_id, [
+                                'institute_type' => $exam->level,
+                                'institute_id' => $institute->id,
+                                'result' => $request->result[$index],
+                            ]);
+                        }
+                    }
+                }
+            }
+
+            if ($request->training && count($request->training_name)) {
+                $applicant->trainings()->delete();
+
+                foreach ($request->training_name as $key => $training) {
+                    if (isset($training) && $training !== null && $training !== '') {
+                        $applicant->trainings()->create([
+                            'name' => $training,
+                            'details' => $request->training_details[$key],
+                        ]);
+                    }
+                }
+            }
+
+            return response()->json(['status' => true]);
+        } else {
+            return response()->json(['status' => false, 'data' => $request->all(), 'errors' => $validation->getMessageBag()->toArray()]);
+        }
     }
 
     /**

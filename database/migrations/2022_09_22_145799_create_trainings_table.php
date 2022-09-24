@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('applicant_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('details');
+            $table->timestamps();
         });
     }
 

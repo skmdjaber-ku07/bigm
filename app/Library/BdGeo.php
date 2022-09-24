@@ -4,6 +4,11 @@ namespace App\Library;
 
 class BdGeo
 {
+    /**
+     * [$divisions description]
+     *
+     * @var [type]
+     */
     protected $divisions = [
         ['id' => 1, 'name' => 'Barishal'],
         ['id' => 2, 'name' => 'Chattogram'],
@@ -15,6 +20,11 @@ class BdGeo
         ['id' => 8, 'name' => 'Mymensingh'],
     ];
 
+    /**
+     * [$districts description]
+     *
+     * @var [type]
+     */
     protected $districts = [
         [
             'id' => 1, 'division_id' => 3, 'name' => 'Dhaka'
@@ -210,6 +220,11 @@ class BdGeo
         ],
     ];
 
+    /**
+     * [$upazilas description]
+     *
+     * @var [type]
+     */
     protected $upazilas = [
         ['id' => 1, 'district_id' => 34, 'name' => 'Amtali'],
         ['id' => 2, 'district_id' => 34, 'name' => 'Bamna'],
@@ -707,11 +722,23 @@ class BdGeo
         ['id' => 495, 'district_id' => 7, 'name' => 'Dasar'],
     ];
 
+    /**
+     * [getDivisions description]
+     *
+     * @return [type]
+     */
     public static function getDivisions()
     {
         return collect(with(new static)->divisions);
     }
 
+    /**
+     * [getDistricts description]
+     *
+     * @param array $division_id
+     *
+     * @return [type]
+     */
     public static function getDistricts($division_id = [])
     {
         return count($division_id) ?
@@ -719,10 +746,55 @@ class BdGeo
                collect(with(new static)->districts);
     }
 
+    /**
+     * [getUpazilas description]
+     *
+     * @param array $district_id
+     *
+     * @return [type]
+     */
     public static function getUpazilas($district_id = [])
     {
         return count($district_id) ?
                collect(with(new static)->upazilas)->whereIn('district_id', $district_id) :
                collect(with(new static)->upazilas);
+    }
+
+    /**
+     * [getCommaSeparatedIds description]
+     *
+     * @param [type] $geo_type
+     * @param array  $parent_id
+     *
+     * @return [type]
+     */
+    public static function getCommaSeparatedIds($geo_type, $parent_id = [])
+    {
+        $getGeoTypes = 'get' . ucfirst($geo_type);
+
+        $ids = self::$getGeoTypes($parent_id)->pluck('id')->toArray();
+
+        $ids = implode(',', $ids);
+
+        return $ids;
+    }
+
+    /**
+     * Get divisions, districts, upazilas array list
+     *
+     * @param NULL|\App\Models\Applicant $applicant
+     *
+     * @return array
+     */
+    public static function getIdNameList($applicant = null)
+    {
+        $division_id = is_null($applicant) ? [] : [$applicant->division_id];
+        $district_id = is_null($applicant) ? [] : [$applicant->district_id];
+
+        return [
+            'divisions' => self::getDivisions()->pluck('name', 'id')->toArray(),
+            'districts' => self::getDistricts($division_id)->pluck('name', 'id')->toArray(),
+            'upazilas' => self::getUpazilas($district_id)->pluck('name', 'id')->toArray(),
+        ];
     }
 }

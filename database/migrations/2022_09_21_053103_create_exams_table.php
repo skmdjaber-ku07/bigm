@@ -16,14 +16,8 @@ return new class extends Migration
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('level', ['school', 'college', 'university']);
-        });
-
-        Schema::create('applicant_exam', function (Blueprint $table) {
-            $table->unsignedBigInteger('applicant_id');
-            $table->unsignedBigInteger('exam_id');
-            $table->morphs('institute');
-            $table->float('result', 8, 2)->unsigned();
+            $table->enum('level', ['board', 'university']);
+            $table->timestamps();
         });
     }
 
@@ -35,7 +29,5 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('exams');
-
-        Schema::dropIfExists('applicant_exam');
     }
 };

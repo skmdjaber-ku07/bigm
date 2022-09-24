@@ -19,19 +19,27 @@ class ExamsTableSeeder extends Seeder
         $exams = [
             [
                 'name' => 'SSC/Equivalent',
-                'level' => 'school',
+                'level' => 'board',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'HSC/Equivalent',
-                'level' => 'college',
+                'level' => 'board',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'Graduation/Equivalent',
                 'level' => 'university',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'Masters/Equivalent',
                 'level' => 'university',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ];
 
