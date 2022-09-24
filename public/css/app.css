@@ -1,0 +1,19 @@
+.none {
+    display: none;
+}
+
+.plain-txt {
+    text-decoration: none!important;
+    color: rgba(0,0,0,.55)!important;
+}
+
+a.plain-txt:hover {
+    color: rgba(0,0,0,.9)!important;
+}
+
+.form-check.inline-block {
+    display: inline-block;
+    margin-right: 20px;
+    line-height: 23px;
+    padding-top: 10px;
+}
