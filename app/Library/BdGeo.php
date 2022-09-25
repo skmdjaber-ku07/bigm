@@ -780,21 +780,29 @@ class BdGeo
     }
 
     /**
-     * Get divisions, districts, upazilas array list
+     * Get divisions, districts, upazilas list
      *
      * @param NULL|\App\Models\Applicant $applicant
      *
      * @return array
      */
-    public static function getIdNameList($applicant = null)
+    public static function getGeoList($applicant = null)
     {
         $division_id = is_null($applicant) ? [] : [$applicant->division_id];
         $district_id = is_null($applicant) ? [] : [$applicant->district_id];
 
-        return [
-            'divisions' => self::getDivisions()->pluck('name', 'id')->toArray(),
-            'districts' => self::getDistricts($division_id)->pluck('name', 'id')->toArray(),
-            'upazilas' => self::getUpazilas($district_id)->pluck('name', 'id')->toArray(),
+        $geo_list['collection'] = [
+            'divisions' => self::getDivisions(),
+            'districts' => self::getDistricts($division_id),
+            'upazilas' => self::getUpazilas($district_id),
         ];
+
+        $geo_list['dropdown'] = [
+            'divisions' => $geo_list['collection']['divisions']->pluck('name', 'id')->toArray(),
+            'districts' => $geo_list['collection']['districts']->pluck('name', 'id')->toArray(),
+            'upazilas' => $geo_list['collection']['upazilas']->pluck('name', 'id')->toArray(),
+        ];
+
+        return $geo_list;
     }
 }

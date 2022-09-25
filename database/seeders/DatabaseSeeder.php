@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             UniversitiesTableSeeder::class,
             BoardsTableSeeder::class,
             ExamsTableSeeder::class,
+            TrainingsTableSeeder::class,
         ]);
 
         \DB::statement('SET FOREIGN_KEY_CHECKS=1;');

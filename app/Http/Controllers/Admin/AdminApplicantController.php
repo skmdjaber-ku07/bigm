@@ -52,7 +52,7 @@ class AdminApplicantController extends Controller
      */
     public function edit(Applicant $applicant)
     {
-        $data = BdGeo::getIdNameList($applicant);
+        $data = BdGeo::getGeoList();
         $data['exams_list'] = Exam::select('name', 'id', 'level')->get();
         $data['boards_list'] = Board::pluck('name', 'id')->prepend('Select Board', '');
         $data['universities_list'] = University::pluck('name', 'id')->prepend('Select University', '');
@@ -75,26 +75,25 @@ class AdminApplicantController extends Controller
         if ($validation->passes()) {
             // Exam and Trainings Validation
 
-
             $applicant->user()->update([
                 'name' => $request->name,
                 'email' => $request->email,
             ]);
 
-            $geo_list = BdGeo::getIdNameList();
+            $geo_list = BdGeo::getGeoList();
 
             $applicant->update([
                 'division' => json_encode([
                     'id' => $request->division_id,
-                    'name' => $geo_list['divisions'][(int) $request->division_id],
+                    'name' => $geo_list['dropdown']['divisions'][(int) $request->division_id],
                 ]),
                 'district' => json_encode([
                     'id' => $request->district_id,
-                    'name' => $geo_list['districts'][(int) $request->district_id],
+                    'name' => $geo_list['dropdown']['districts'][(int) $request->district_id],
                 ]),
                 'upazila' => json_encode([
                     'id' => $request->upazila_id,
-                    'name' => $geo_list['upazilas'][(int) $request->upazila_id],
+                    'name' => $geo_list['dropdown']['upazilas'][(int) $request->upazila_id],
                 ]),
                 'address_details' => $request->address_details,
                 'language' => json_encode($request->language),
@@ -102,12 +101,13 @@ class AdminApplicantController extends Controller
 
             if (count($request->exam)) {
                 $applicant->exams()->delete();
+                \DB::table('applicant_exam')->whereApplicantId($applicant->id)->delete();
 
                 foreach ($request->exam as $index => $exam_id) {
                     $exam = Exam::find($exam_id);
 
                     if (isset($exam)) {
-                        $institute = \DB::table($exam->level . 's')
+                        $institute = \DB::table(\Str::plural($exam->level))
                                         ->whereId($request->institute[$index])
                                         ->first();
 

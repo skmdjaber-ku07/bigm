@@ -55,7 +55,7 @@
                             <label for="division" class="col-md-4 col-form-label text-md-end">Division</label>
 
                             <div class="col-md-6">
-                                {{ Form::select('division_id', ['' => 'Select Division'] + $data['divisions'], null, ['id' => 'division', 'class' => 'form-control']) }}
+                                {{ Form::select('division_id', ['' => 'Select Division'] + $data['dropdown']['divisions'], null, ['id' => 'division', 'class' => 'form-control', 'data-dropdown-child' => 'district_id']) }}
 
                                 @error('division_id')
                                     <span class="invalid-feedback" role="alert">
@@ -69,7 +69,19 @@
                             <label for="district" class="col-md-4 col-form-label text-md-end">District</label>
 
                             <div class="col-md-6">
-                                {{ Form::select('district_id', ['' => 'Select District'] + $data['districts'], null, ['id' => 'district', 'class' => 'form-control']) }}
+                                <select name="district_id" id="district" class="form-control" data-dropdown-child="upazila_id">
+                                    <option value="">Select District</option>
+
+                                    @foreach($data['collection']['districts'] as $district)
+                                        <option value="{{ $district['id'] }}"
+                                                @if($applicant->district_id == $district['id']) selected @endif
+                                                data-parent="{{ $district['division_id'] }}"
+                                                class="{{ $applicant->division_id == $district['division_id'] ?: 'none' }}">
+                                                {{ $district['name'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
 
                                 @error('district_id')
                                     <span class="invalid-feedback" role="alert">
@@ -83,7 +95,18 @@
                             <label for="upazila" class="col-md-4 col-form-label text-md-end">Upazila / tdana</label>
 
                             <div class="col-md-6">
-                                {{ Form::select('upazila_id', ['' => 'Select Upazila'] + $data['upazilas'], null, ['id' => 'upazila', 'class' => 'form-control']) }}
+                                <select name="upazila_id" id="upazila" class="form-control">
+                                    <option value="">Select Upazila</option>
+
+                                    @foreach($data['collection']['upazilas'] as $upazila)
+                                        <option value="{{ $upazila['id'] }}"
+                                                @if($applicant->upazila_id == $upazila['id']) selected @endif
+                                                data-parent="{{ $upazila['district_id'] }}"
+                                                class="{{ $applicant->district_id == $upazila['district_id'] ?: 'none' }}">
+                                                {{ $upazila['name'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
 
                                 @error('upazila_id')
                                     <span class="invalid-feedback" role="alert">
@@ -144,60 +167,7 @@
                             <label for="education" class="col-md-4 col-form-label text-md-end">Education Qualification</label>
 
                             <div class="col-md-6">
-                                <table id="exam-table" class="table">
-                                    <tr>
-                                        <td style="min-width: 130px;">Exam Name</td>
-                                        <td style="width: 200px;">Board/University</td>
-                                        <td style="width: 100px;">Result</td>
-                                        <td></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <select name="exam[]" class="form-control">
-                                                <option value="">Select Exam</option>
-
-                                                @foreach($data['exams_list'] as $exam)
-                                                    <option value="{{ $exam->id }}" level="{{ $exam->level }}">{{ $exam->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            {{ Form::select('institute[]', ['' => '--'], null, ['class' => 'form-control', 'disabled' => true]) }}
-                                        </td>
-                                        <td>
-                                            {{ Form::text('result[]', null, ['class' => 'form-control']) }}
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-light btn-sm" disabled>X</button>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <select name="exam[]" class="form-control">
-                                                <option value="">Select Exam</option>
-
-                                                @foreach($data['exams_list'] as $exam)
-                                                    <option value="{{ $exam->id }}" level="{{ $exam->level }}">{{ $exam->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            {{ Form::select('institute[]', ['' => '--'], null, ['class' => 'form-control', 'disabled' => true]) }}
-                                        </td>
-                                        <td>
-                                            {{ Form::text('result[]', null, ['class' => 'form-control']) }}
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-light btn-sm" disabled>X</button>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                                {{ Form::select('board', $data['boards_list'], null, ['id' => 'board', 'class' => 'd-none']) }}
-                                {{ Form::select('university', $data['universities_list'], null, ['id' => 'university', 'class' => 'd-none']) }}
-                                <p class="text-end add-more" data-table="exam-table"><button class="btn btn-light btn-sm">Add More..</button></p>
+                                @include('admin.applicants.partials.exams_form')
 
                                 @error('education')
                                     <span class="invalid-feedback" role="alert">
@@ -247,17 +217,33 @@
                                             <td></td>
                                         </tr>
 
-                                        <tr>
-                                            <td>
-                                                {{ Form::text('training_name[]', null, ['class' => 'form-control']) }}
-                                            </td>
-                                            <td>
-                                                {{ Form::text('training_details[]', null, ['class' => 'form-control']) }}
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-light btn-sm" disabled>X</button>
-                                            </td>
-                                        </tr>
+                                        @if(isset($applicant) && $applicant->trainings()->count())
+                                            @foreach($applicant->trainings as $index => $applicant_training)
+                                                <tr>
+                                                    <td>
+                                                        {{ Form::text('training_name[]', $applicant_training->name, ['class' => 'form-control']) }}
+                                                    </td>
+                                                    <td>
+                                                        {{ Form::text('training_details[]', $applicant_training->details, ['class' => 'form-control']) }}
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-light btn-sm @if($index > 0) remove-tr @endif" @if($index == 0) disabled @endif>X</button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @else
+                                            <tr>
+                                                <td>
+                                                    {{ Form::text('training_name[]', null, ['class' => 'form-control']) }}
+                                                </td>
+                                                <td>
+                                                    {{ Form::text('training_details[]', null, ['class' => 'form-control']) }}
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-light btn-sm" disabled>X</button>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     </table>
 
                                     <p class="text-end add-more" data-table="training-table"><button class="btn btn-light btn-sm">Add More..</button></p>

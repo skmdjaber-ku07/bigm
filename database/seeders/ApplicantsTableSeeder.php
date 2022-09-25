@@ -16,6 +16,8 @@ class ApplicantsTableSeeder extends Seeder
     {
         \DB::table('applicants')->truncate();
 
+        \DB::table('applicant_exam')->truncate();
+
         $applicants = [
             [
                 'user_id' => 2,
@@ -40,5 +42,44 @@ class ApplicantsTableSeeder extends Seeder
         ];
 
         \DB::table('applicants')->insert($applicants);
+
+        \DB::table('applicant_exam')->insert([
+            [
+                'applicant_id' => 1,
+                'exam_id' => 1,
+                'institute_type' => 'board',
+                'institute_id' => 3,
+                'result' => 4.5,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'applicant_id' => 1,
+                'exam_id' => 2,
+                'institute_type' => 'board',
+                'institute_id' => 3,
+                'result' => 4.7,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'applicant_id' => 1,
+                'exam_id' => 3,
+                'institute_type' => 'university',
+                'institute_id' => 13,
+                'result' => 3.5,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'applicant_id' => 1,
+                'exam_id' => 4,
+                'institute_type' => 'university',
+                'institute_id' => 3,
+                'result' => 3.7,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
     }
 }

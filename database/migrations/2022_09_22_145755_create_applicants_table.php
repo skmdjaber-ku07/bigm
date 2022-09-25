@@ -15,18 +15,19 @@ return new class extends Migration
     {
         Schema::create('applicants', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('language');
             $table->string('division');
             $table->string('district');
             $table->string('upazila');
             $table->string('address_details');
+            $table->string('language');
             $table->string('photo')->nullable();
             $table->string('cv')->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
 
         Schema::create('applicant_exam', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('applicant_id');
             $table->unsignedBigInteger('exam_id');
             $table->morphs('institute');

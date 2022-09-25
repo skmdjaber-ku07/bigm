@@ -24,6 +24,16 @@ $(document).ready( function () {
         ],
     });
 
+    $('select[data-dropdown-child]').on('change', function (e) {
+        var child = "select[name='" + $(this).data('dropdown-child') + "']";
+        var optionIndex = $(child).prop('selectedIndex');
+
+        $(child + " option").addClass('none');
+        $(child + " option[data-parent='" + $(this).val() + "']").removeClass('none');
+        $(child + " option[value='']").removeClass('none');
+        $(child).val("").trigger('change');
+    });
+
     // Dropdown exam list change event for proper options list (Board / University)
     $(document).on('change', "select[name='exam[]']", function (e) {
         var institute = $(this).closest('tr').find("select[name='institute[]']");
