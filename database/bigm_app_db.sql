@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 24, 2022 at 07:51 PM
+-- Generation Time: Sep 25, 2022 at 07:34 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -29,14 +29,14 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `applicants` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `language` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `division` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `district` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `upazila` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `address_details` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address_details` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `language` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `photo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cv` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -45,9 +45,9 @@ CREATE TABLE `applicants` (
 -- Dumping data for table `applicants`
 --
 
-INSERT INTO `applicants` (`id`, `user_id`, `language`, `division`, `district`, `upazila`, `address_details`, `photo`, `cv`, `created_at`, `updated_at`) VALUES
-(1, 2, '[\"bangla\",\"english\",\"french\"]', '{\"id\":3,\"name\":\"Dhaka\"}', '{\"id\":6,\"name\":\"Kishoreganj\"}', '{\"id\":185,\"name\":\"Kishoreganj Sadar\"}', 'Roshidabad', NULL, NULL, '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(2, 3, '[\"bangla\",\"english\"]', '{\"id\":8,\"name\":\"Mymensingh\"}', '{\"id\":10,\"name\":\"Mymensingh\"}', '{\"id\":217,\"name\":\"Mymensingh Sadar\"}', 'Vabkhali', NULL, NULL, '2022-09-24 11:51:43', '2022-09-24 11:51:43');
+INSERT INTO `applicants` (`id`, `division`, `district`, `upazila`, `address_details`, `language`, `photo`, `cv`, `user_id`, `created_at`, `updated_at`) VALUES
+(1, '{\"id\":3,\"name\":\"Dhaka\"}', '{\"id\":6,\"name\":\"Kishoreganj\"}', '{\"id\":185,\"name\":\"Kishoreganj Sadar\"}', 'Roshidabad', '[\"bangla\",\"english\",\"french\"]', NULL, NULL, 2, '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(2, '{\"id\":8,\"name\":\"Mymensingh\"}', '{\"id\":10,\"name\":\"Mymensingh\"}', '{\"id\":217,\"name\":\"Mymensingh Sadar\"}', 'Vabkhali', '[\"bangla\",\"english\"]', NULL, NULL, 3, '2022-09-25 11:33:42', '2022-09-25 11:33:42');
 
 -- --------------------------------------------------------
 
@@ -56,6 +56,7 @@ INSERT INTO `applicants` (`id`, `user_id`, `language`, `division`, `district`, `
 --
 
 CREATE TABLE `applicant_exam` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `applicant_id` bigint(20) UNSIGNED NOT NULL,
   `exam_id` bigint(20) UNSIGNED NOT NULL,
   `institute_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -64,6 +65,16 @@ CREATE TABLE `applicant_exam` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `applicant_exam`
+--
+
+INSERT INTO `applicant_exam` (`id`, `applicant_id`, `exam_id`, `institute_type`, `institute_id`, `result`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'board', 3, 4.50, '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(2, 1, 2, 'board', 3, 4.70, '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(3, 1, 3, 'university', 13, 3.50, '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(4, 1, 4, 'university', 3, 3.70, '2022-09-25 11:33:42', '2022-09-25 11:33:42');
 
 -- --------------------------------------------------------
 
@@ -83,18 +94,18 @@ CREATE TABLE `boards` (
 --
 
 INSERT INTO `boards` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'Barisal', '2022-09-24 11:51:44', '2022-09-24 11:51:44'),
-(2, 'Chittagong', '2022-09-24 11:51:44', '2022-09-24 11:51:44'),
-(3, 'Comilla', '2022-09-24 11:51:44', '2022-09-24 11:51:44'),
-(4, 'Dhaka', '2022-09-24 11:51:44', '2022-09-24 11:51:44'),
-(5, 'Dinajpur', '2022-09-24 11:51:44', '2022-09-24 11:51:44'),
-(6, 'Jessore', '2022-09-24 11:51:44', '2022-09-24 11:51:44'),
-(7, 'Mymensingh', '2022-09-24 11:51:44', '2022-09-24 11:51:44'),
-(8, 'Rajshahi', '2022-09-24 11:51:44', '2022-09-24 11:51:44'),
-(9, 'Sylhet', '2022-09-24 11:51:44', '2022-09-24 11:51:44'),
-(10, 'Madrasah', '2022-09-24 11:51:44', '2022-09-24 11:51:44'),
-(11, 'Technical', '2022-09-24 11:51:44', '2022-09-24 11:51:44'),
-(12, 'DIBS(Dhaka)', '2022-09-24 11:51:44', '2022-09-24 11:51:44');
+(1, 'Barisal', '2022-09-25 11:33:43', '2022-09-25 11:33:43'),
+(2, 'Chittagong', '2022-09-25 11:33:43', '2022-09-25 11:33:43'),
+(3, 'Comilla', '2022-09-25 11:33:43', '2022-09-25 11:33:43'),
+(4, 'Dhaka', '2022-09-25 11:33:43', '2022-09-25 11:33:43'),
+(5, 'Dinajpur', '2022-09-25 11:33:43', '2022-09-25 11:33:43'),
+(6, 'Jessore', '2022-09-25 11:33:43', '2022-09-25 11:33:43'),
+(7, 'Mymensingh', '2022-09-25 11:33:43', '2022-09-25 11:33:43'),
+(8, 'Rajshahi', '2022-09-25 11:33:43', '2022-09-25 11:33:43'),
+(9, 'Sylhet', '2022-09-25 11:33:43', '2022-09-25 11:33:43'),
+(10, 'Madrasah', '2022-09-25 11:33:43', '2022-09-25 11:33:43'),
+(11, 'Technical', '2022-09-25 11:33:43', '2022-09-25 11:33:43'),
+(12, 'DIBS(Dhaka)', '2022-09-25 11:33:43', '2022-09-25 11:33:43');
 
 -- --------------------------------------------------------
 
@@ -115,10 +126,10 @@ CREATE TABLE `exams` (
 --
 
 INSERT INTO `exams` (`id`, `name`, `level`, `created_at`, `updated_at`) VALUES
-(1, 'SSC/Equivalent', 'board', '2022-09-24 11:51:44', '2022-09-24 11:51:44'),
-(2, 'HSC/Equivalent', 'board', '2022-09-24 11:51:44', '2022-09-24 11:51:44'),
-(3, 'Graduation/Equivalent', 'university', '2022-09-24 11:51:44', '2022-09-24 11:51:44'),
-(4, 'Masters/Equivalent', 'university', '2022-09-24 11:51:44', '2022-09-24 11:51:44');
+(1, 'SSC/Equivalent', 'board', '2022-09-25 11:33:43', '2022-09-25 11:33:43'),
+(2, 'HSC/Equivalent', 'board', '2022-09-25 11:33:43', '2022-09-25 11:33:43'),
+(3, 'Graduation/Equivalent', 'university', '2022-09-25 11:33:43', '2022-09-25 11:33:43'),
+(4, 'Masters/Equivalent', 'university', '2022-09-25 11:33:43', '2022-09-25 11:33:43');
 
 -- --------------------------------------------------------
 
@@ -202,12 +213,20 @@ CREATE TABLE `personal_access_tokens` (
 
 CREATE TABLE `trainings` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `applicant_id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `details` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `details` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `applicant_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `trainings`
+--
+
+INSERT INTO `trainings` (`id`, `name`, `details`, `applicant_id`, `created_at`, `updated_at`) VALUES
+(1, 'PGD', 'Post Graduation Diploma', 1, '2022-09-25 11:33:44', '2022-09-25 11:33:44'),
+(2, 'CCNA', 'CCNA exam covers networking fundamentals, IP services, security fundamentals, automation and programmability. Designed for agility and versatility', 1, '2022-09-25 11:33:44', '2022-09-25 11:33:44');
 
 -- --------------------------------------------------------
 
@@ -227,128 +246,128 @@ CREATE TABLE `universities` (
 --
 
 INSERT INTO `universities` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'University of Dhaka', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(2, 'University of Rajshahi', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(3, 'Bangladesh Agricultural University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(4, 'Bangladesh University of Engineering & Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(5, 'University of Chittagong', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(6, 'Jahangirnagar University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(7, 'Islamic University, Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(8, 'Shahjalal University of Science and Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(9, 'Khulna University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(10, 'Bangabandhu Sheikh Mujib Medical University ', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(11, 'Bangabandhu Sheikh Mujibur Rahman Agricultural University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(12, 'Hajee Mohammad Danesh Science & Technology University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(13, 'Mawlana Bhashani Science and Technology University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(14, 'Patuakhali Science and Technology University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(15, 'Sher-e-Bangla Agricultural University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(16, 'Dhaka University of Engineering & Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(17, 'Rajshahi University of Engineering & Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(18, 'Chittagong University of Engineering & Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(19, 'Khulna University of Engineering & Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(20, 'Jagannath University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(21, 'Jatiya Kabi Kazi Nazrul Islam University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(22, 'Chittagong Veterinary and Animal Sciences University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(23, 'Sylhet Agricultural University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(24, 'Comilla University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(25, 'Noakhali Science and Technology University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(26, 'Jessore University of Science & Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(27, 'Pabna University of Science and Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(28, 'Bangladesh University of Professionals', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(29, 'Begum Rokeya University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(30, 'Bangladesh University of Textiles', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(31, 'University of Barisal', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(32, 'Bangabandhu Sheikh Mujibur Rahman Science and Technology University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(33, 'Islamic Arabic University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(34, 'Bangabandhu Sheikh Mujibur Rahman Maritime University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(35, 'Rangamati Science and Technology University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(36, 'Dhaka International University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(37, 'Ahsanullah University of Science and Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(38, 'BRAC University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(39, 'East West University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(40, 'North South University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(41, 'American International University-Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(42, 'Independent University, Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(43, 'Bangladesh University of Business and Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(44, 'Gono Bishwabidyalay', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(45, 'Hamdard University Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(46, 'International Islamic University, Chittagong', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(47, 'Chittagong Independent University (CIU)', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(48, 'University of Science & Technology Chittagong', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(49, 'Begum Gulchemonara Trust University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(50, 'East Delta University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(51, 'Bangladesh Army University of Science and Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(52, 'Bangladesh Army International University of Science & Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(53, 'Britannia University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(54, 'Feni University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(55, 'Bangladesh Army University of Engineering & Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(56, 'Premier University, Chittagong', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(57, 'Exim Bank Agricultural University Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(58, 'Southern University, Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(59, 'Port City International University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(60, 'Coxs Bazar International University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(61, 'Notre Dame University Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(62, 'Asian University of Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(63, 'Asa University Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(64, 'Atish Dipankar University of Science and Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(65, 'Bangladesh Islami University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(66, 'Bangladesh University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(67, 'Central Women\'s University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(68, 'City University, Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(69, 'Daffodil International University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(70, 'Eastern University, Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(71, 'Green University of Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(72, 'IBAIS University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(73, 'Sonargaon University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(74, 'International University of Business Agriculture and Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(75, 'Manarat International University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(76, 'Millennium University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(77, 'Northern University, Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(78, 'North Western University, Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(79, 'People\'s University of Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(80, 'Presidency University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(81, 'Pundra University of Science and Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(82, 'Prime University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(83, 'European University of Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(84, 'Primeasia University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(85, 'Queens University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(86, 'Rajshahi Science & Technology University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(87, 'Royal University of Dhaka', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(88, 'Shanto-Mariam University of Creative Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(89, 'Southeast University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(90, 'Stamford University Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(91, 'State University of Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(92, 'United International University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(93, 'University of Asia Pacific (Bangladesh)', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(94, 'University of Development Alternative', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(95, 'University of Information Technology and Sciences', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(96, 'University of Liberal Arts Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(97, 'Fareast International University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(98, 'University of South Asia, Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(99, 'Uttara University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(100, 'Victoria University of Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(101, 'Varendra University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(102, 'World University of Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(103, 'Leading University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(104, 'Metropolitan University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(105, 'North East University Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(106, 'Sylhet International University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(107, 'Khwaja Yunus Ali University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(108, 'Global University Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(109, 'University of Creative Technology Chittagong', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(110, 'Z H Sikder University of Science & Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(111, 'Central University of Science and Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(112, 'Canadian University of Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(113, 'First Capital University of Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(114, 'Ishaka International University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(115, 'Northern University of Business & Technology, Khulna', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(116, 'North Bengal International University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(117, 'Ranada Prasad Shaha University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(118, 'Islamic University of Technology', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(119, 'Asian University for Women', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(120, 'Bangladesh Open University', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(121, 'National University of Bangladesh', '2022-09-24 11:51:43', '2022-09-24 11:51:43'),
-(122, 'Islamic Arabic University', '2022-09-24 11:51:43', '2022-09-24 11:51:43');
+(1, 'University of Dhaka', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(2, 'University of Rajshahi', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(3, 'Bangladesh Agricultural University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(4, 'Bangladesh University of Engineering & Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(5, 'University of Chittagong', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(6, 'Jahangirnagar University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(7, 'Islamic University, Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(8, 'Shahjalal University of Science and Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(9, 'Khulna University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(10, 'Bangabandhu Sheikh Mujib Medical University ', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(11, 'Bangabandhu Sheikh Mujibur Rahman Agricultural University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(12, 'Hajee Mohammad Danesh Science & Technology University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(13, 'Mawlana Bhashani Science and Technology University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(14, 'Patuakhali Science and Technology University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(15, 'Sher-e-Bangla Agricultural University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(16, 'Dhaka University of Engineering & Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(17, 'Rajshahi University of Engineering & Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(18, 'Chittagong University of Engineering & Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(19, 'Khulna University of Engineering & Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(20, 'Jagannath University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(21, 'Jatiya Kabi Kazi Nazrul Islam University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(22, 'Chittagong Veterinary and Animal Sciences University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(23, 'Sylhet Agricultural University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(24, 'Comilla University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(25, 'Noakhali Science and Technology University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(26, 'Jessore University of Science & Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(27, 'Pabna University of Science and Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(28, 'Bangladesh University of Professionals', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(29, 'Begum Rokeya University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(30, 'Bangladesh University of Textiles', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(31, 'University of Barisal', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(32, 'Bangabandhu Sheikh Mujibur Rahman Science and Technology University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(33, 'Islamic Arabic University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(34, 'Bangabandhu Sheikh Mujibur Rahman Maritime University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(35, 'Rangamati Science and Technology University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(36, 'Dhaka International University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(37, 'Ahsanullah University of Science and Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(38, 'BRAC University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(39, 'East West University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(40, 'North South University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(41, 'American International University-Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(42, 'Independent University, Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(43, 'Bangladesh University of Business and Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(44, 'Gono Bishwabidyalay', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(45, 'Hamdard University Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(46, 'International Islamic University, Chittagong', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(47, 'Chittagong Independent University (CIU)', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(48, 'University of Science & Technology Chittagong', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(49, 'Begum Gulchemonara Trust University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(50, 'East Delta University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(51, 'Bangladesh Army University of Science and Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(52, 'Bangladesh Army International University of Science & Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(53, 'Britannia University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(54, 'Feni University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(55, 'Bangladesh Army University of Engineering & Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(56, 'Premier University, Chittagong', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(57, 'Exim Bank Agricultural University Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(58, 'Southern University, Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(59, 'Port City International University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(60, 'Coxs Bazar International University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(61, 'Notre Dame University Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(62, 'Asian University of Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(63, 'Asa University Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(64, 'Atish Dipankar University of Science and Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(65, 'Bangladesh Islami University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(66, 'Bangladesh University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(67, 'Central Women\'s University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(68, 'City University, Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(69, 'Daffodil International University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(70, 'Eastern University, Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(71, 'Green University of Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(72, 'IBAIS University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(73, 'Sonargaon University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(74, 'International University of Business Agriculture and Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(75, 'Manarat International University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(76, 'Millennium University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(77, 'Northern University, Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(78, 'North Western University, Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(79, 'People\'s University of Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(80, 'Presidency University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(81, 'Pundra University of Science and Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(82, 'Prime University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(83, 'European University of Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(84, 'Primeasia University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(85, 'Queens University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(86, 'Rajshahi Science & Technology University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(87, 'Royal University of Dhaka', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(88, 'Shanto-Mariam University of Creative Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(89, 'Southeast University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(90, 'Stamford University Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(91, 'State University of Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(92, 'United International University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(93, 'University of Asia Pacific (Bangladesh)', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(94, 'University of Development Alternative', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(95, 'University of Information Technology and Sciences', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(96, 'University of Liberal Arts Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(97, 'Fareast International University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(98, 'University of South Asia, Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(99, 'Uttara University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(100, 'Victoria University of Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(101, 'Varendra University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(102, 'World University of Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(103, 'Leading University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(104, 'Metropolitan University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(105, 'North East University Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(106, 'Sylhet International University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(107, 'Khwaja Yunus Ali University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(108, 'Global University Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(109, 'University of Creative Technology Chittagong', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(110, 'Z H Sikder University of Science & Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(111, 'Central University of Science and Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(112, 'Canadian University of Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(113, 'First Capital University of Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(114, 'Ishaka International University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(115, 'Northern University of Business & Technology, Khulna', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(116, 'North Bengal International University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(117, 'Ranada Prasad Shaha University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(118, 'Islamic University of Technology', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(119, 'Asian University for Women', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(120, 'Bangladesh Open University', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(121, 'National University of Bangladesh', '2022-09-25 11:33:42', '2022-09-25 11:33:42'),
+(122, 'Islamic Arabic University', '2022-09-25 11:33:42', '2022-09-25 11:33:42');
 
 -- --------------------------------------------------------
 
@@ -373,9 +392,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `type`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Super Admin', 'admin', 'admin@gmail.com', '2022-09-24 11:51:42', '$2y$10$Bvz.r16PDnHnHcKN34UnEumUutCQaSY1t0rmet0csXgq5eG4v4EvO', '7u5YWyLIBq', '2022-09-24 11:51:42', '2022-09-24 11:51:42'),
-(2, 'Mamun', 'applicant', 'bdabdulla@gmail.com', '2022-09-24 11:51:42', '$2y$10$ATHcSSPRIzzbqmmbEY06E.AL8YbSlZKDbv1rX0jbBBvE7oiodjpdG', 'JeMPBYFqv8', '2022-09-24 11:51:42', '2022-09-24 11:51:42'),
-(3, 'Mhabub', 'applicant', 'mhabub@gmail.com', '2022-09-24 11:51:42', '$2y$10$EORcKyOIfHOQGPTFomQQOu37BEvT8DETkAPExCSAvynowN78eTh7O', 'm2jjS0xrD0', '2022-09-24 11:51:42', '2022-09-24 11:51:42');
+(1, 'Super Admin', 'admin', 'admin@gmail.com', '2022-09-25 11:33:40', '$2y$10$IRq2GI.y4BLY00eR4r6UJufZyXwe0L74JmmaZGfqTHNnEnzM4x1VO', 'Gx3kxwdvNu', '2022-09-25 11:33:41', '2022-09-25 11:33:41'),
+(2, 'Mamun', 'applicant', 'bdabdulla@gmail.com', '2022-09-25 11:33:41', '$2y$10$tgoZZZyF0EbHHHLreGpqJuyRIeGyzuUvcFxIs0dgRoMw0Qpkk.L9K', 'sHlifGbuRx', '2022-09-25 11:33:41', '2022-09-25 11:33:41'),
+(3, 'Mhabub', 'applicant', 'mhabub@gmail.com', '2022-09-25 11:33:41', '$2y$10$1dzOj5fGDW4T9HscQUIniuVfywxDA.DHkawzsnB45PQy37SsCccce', 'FF4hEaOsiv', '2022-09-25 11:33:41', '2022-09-25 11:33:41');
 
 --
 -- Indexes for dumped tables
@@ -392,6 +411,7 @@ ALTER TABLE `applicants`
 -- Indexes for table `applicant_exam`
 --
 ALTER TABLE `applicant_exam`
+  ADD PRIMARY KEY (`id`),
   ADD KEY `applicant_exam_institute_type_institute_id_index` (`institute_type`,`institute_id`);
 
 --
@@ -464,6 +484,12 @@ ALTER TABLE `applicants`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `applicant_exam`
+--
+ALTER TABLE `applicant_exam`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `boards`
 --
 ALTER TABLE `boards`
@@ -497,7 +523,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `trainings`
 --
 ALTER TABLE `trainings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `universities`

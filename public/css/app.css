@@ -17,3 +17,23 @@ a.plain-txt:hover {
     line-height: 23px;
     padding-top: 10px;
 }
+
+label {
+    position: relative;
+}
+
+label .text-danger {
+    position: absolute;
+    right: 0;
+    top: 10px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}

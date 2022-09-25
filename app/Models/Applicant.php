@@ -51,17 +51,21 @@ class Applicant extends Model
     public static function validate($data)
     {
         return validator($data, [
-            'name' => 'required',
-            'email' => 'required|email',
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255',
             'division_id' => 'required|in:' . BdGeo::getCommaSeparatedIds('divisions'),
             'district_id' => 'required|in:' . BdGeo::getCommaSeparatedIds('districts', [$data['division_id']]),
             'upazila_id' => 'required|in:' . BdGeo::getCommaSeparatedIds('upazilas', [$data['district_id']]),
-            'address_details' => 'required',
+            'address_details' => 'max:255',
             'language' => 'array|in:bangla,english,french',
-            // 'exam' => 'required|array|exists:exams,id',
-            // 'institute' => 'required|array',
+            'exam' => 'required|array|exists:exams,id',
+            'institute' => 'required|array',
+            'result' => 'required|array',
             'photo' => 'image|mimetypes:image/webp,image/jpeg,image/png,image/jpg,image/gif|max:3072',
-            'cv' => 'mimes:doc,pdf|max:3072',
+            'cv' => 'mimetypes:application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document|max:3072',
+            'training' => 'required|in:0,1',
+            'training_name' => $data['training'] ? 'required|array' : 'array',
+            'training_details' => 'array',
         ]);
     }
 

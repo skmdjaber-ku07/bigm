@@ -5,9 +5,9 @@ namespace App\Library;
 class BdGeo
 {
     /**
-     * [$divisions description]
+     * Divisions array List
      *
-     * @var [type]
+     * @var array
      */
     protected $divisions = [
         ['id' => 1, 'name' => 'Barishal'],
@@ -21,9 +21,9 @@ class BdGeo
     ];
 
     /**
-     * [$districts description]
+     * Districts array list
      *
-     * @var [type]
+     * @var array
      */
     protected $districts = [
         [
@@ -221,9 +221,9 @@ class BdGeo
     ];
 
     /**
-     * [$upazilas description]
+     * Upazila array list
      *
-     * @var [type]
+     * @var array
      */
     protected $upazilas = [
         ['id' => 1, 'district_id' => 34, 'name' => 'Amtali'],
@@ -723,9 +723,9 @@ class BdGeo
     ];
 
     /**
-     * [getDivisions description]
+     * Get divisions collection
      *
-     * @return [type]
+     * @return \Illuminate\Support\Collection
      */
     public static function getDivisions()
     {
@@ -733,11 +733,11 @@ class BdGeo
     }
 
     /**
-     * [getDistricts description]
+     * Get districts collection
      *
      * @param array $division_id
      *
-     * @return [type]
+     * @return \Illuminate\Support\Collection
      */
     public static function getDistricts($division_id = [])
     {
@@ -747,11 +747,11 @@ class BdGeo
     }
 
     /**
-     * [getUpazilas description]
+     * Get upazila collection
      *
      * @param array $district_id
      *
-     * @return [type]
+     * @return \Illuminate\Support\Collection
      */
     public static function getUpazilas($district_id = [])
     {
@@ -761,12 +761,12 @@ class BdGeo
     }
 
     /**
-     * [getCommaSeparatedIds description]
+     * Get comma separated id string of a Geo Type (Divisions | Districts | Upazila)
      *
-     * @param [type] $geo_type
+     * @param string $geo_type
      * @param array  $parent_id
      *
-     * @return [type]
+     * @return string
      */
     public static function getCommaSeparatedIds($geo_type, $parent_id = [])
     {

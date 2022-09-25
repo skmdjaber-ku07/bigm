@@ -10,7 +10,7 @@
                 <div class="card-body">
                     {!! Form::model($applicant, ['route' => ['admin.applicants.update', $applicant->id], 'method' => 'put', 'files' => true, 'id' => 'page-form']) !!}
                         <div class="row mb-3">
-                            <label for="name" class="col-md-3 col-form-label text-md-end">{{ __('Name') }}</label>
+                            <label for="name" class="col-md-3 col-form-label text-md-end">{{ __('Name') }} <span class='text-danger'>*</span></label>
 
                             <div class="col-md-6">
                                 {{ Form::text('name', null, ['id' => 'name', 'class' => 'form-control', "autocomplete" => "name", "required" => true, "autofocus" => true]) }}
@@ -24,7 +24,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="email" class="col-md-3 col-form-label text-md-end">{{ __('Email Address') }}</label>
+                            <label for="email" class="col-md-3 col-form-label text-md-end">{{ __('Email Address') }} <span class='text-danger'>*</span></label>
 
                             <div class="col-md-6">
                                 {{ Form::email('email', null, ['id' => 'email', 'class' => 'form-control', "autocomplete" => "email", "required" => true]) }}
@@ -51,14 +51,14 @@
                             </div>
 
                             <div class="col-md-2 position-relative">
-                                <img src="{{ $applicant->photo ? asset($applicant->photo) : 'https://gravatar.com/avatar/9095ca04f14b3ec92563039e7864223e?s=200&d=mp&r=x' }}"
+                                <img src="{{ $applicant->photo && file_exists(public_path($applicant->photo)) ? asset($applicant->photo) : 'https://gravatar.com/avatar/9095ca04f14b3ec92563039e7864223e?s=200&d=mp&r=x' }}"
                                      alt="{{ $applicant->name }}"
                                      class="img-fluid img-thumbnail position-absolute bottom-0 end-0 avatar">
                             </div>
                         </div>
 
                         <div class="row mb-3">
-                            <label for="division" class="col-md-3 col-form-label text-md-end">Division</label>
+                            <label for="division" class="col-md-3 col-form-label text-md-end">Division <span class='text-danger'>*</span></label>
 
                             <div class="col-md-6">
                                 {{ Form::select('division_id', ['' => 'Select Division'] + $data['dropdown']['divisions'], null, ['id' => 'division', 'class' => 'form-control', 'data-dropdown-child' => 'district_id']) }}
@@ -72,7 +72,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="district" class="col-md-3 col-form-label text-md-end">District</label>
+                            <label for="district" class="col-md-3 col-form-label text-md-end">District <span class='text-danger'>*</span></label>
 
                             <div class="col-md-6">
                                 <select name="district_id" id="district" class="form-control" data-dropdown-child="upazila_id">
@@ -98,7 +98,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="upazila" class="col-md-3 col-form-label text-md-end">Upazila / tdana</label>
+                            <label for="upazila" class="col-md-3 col-form-label text-md-end">Upazila/Thana <span class='text-danger'>*</span></label>
 
                             <div class="col-md-6">
                                 <select name="upazila_id" id="upazila" class="form-control">
@@ -170,7 +170,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="education" class="col-md-3 col-form-label text-md-end">Education Qualification</label>
+                            <label for="education" class="col-md-3 col-form-label text-md-end">Education Qualification <span class='text-danger'>*</span></label>
 
                             <div class="col-md-6">
                                 @include('admin.applicants.partials.exams_form')
@@ -184,7 +184,13 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="cv" class="col-md-3 col-form-label text-md-end">CV Attachment</label>
+                            <label for="cv" class="col-md-3 col-form-label text-md-end">
+                                @if($applicant->cv && file_exists(public_path($applicant->cv)))
+                                    <a target="_blank" href="{{ url($applicant->cv) }}" class="">Applicant CV</a>
+                                @else
+                                    CV Attachment
+                                @endif
+                            </label>
 
                             <div class="col-md-6">
                                 {{ Form::file('cv', ['accept' => 'application/msword, application/pdf', 'class' => 'form-control']) }}

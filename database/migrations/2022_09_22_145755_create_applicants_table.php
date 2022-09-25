@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('division');
             $table->string('district');
             $table->string('upazila');
-            $table->string('address_details');
-            $table->string('language');
+            $table->string('address_details')->nullable();
+            $table->string('language')->nullable();
             $table->string('photo')->nullable();
             $table->string('cv')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');

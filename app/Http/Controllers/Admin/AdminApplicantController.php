@@ -69,19 +69,25 @@ class AdminApplicantController extends Controller
      */
     public function update(Request $request, Applicant $applicant)
     {
-        $validation = Applicant::validate($request->all());
+        $data = $request->all();
+        $applicant_exams_count = 0;
+        $applicant_trainings_count = 0;
+        $data['result'] = \Arr::map($request->result, function ($value, $key) {
+            return floatval($value);
+        });
+
+        $validation = Applicant::validate($data);
 
         // Update posted data if validation passes.
         if ($validation->passes()) {
-            // Exam and Trainings Validation
-
+            // Update User data which is associated with the applicant
             $applicant->user()->update([
                 'name' => $request->name,
                 'email' => $request->email,
             ]);
 
+            // Update the applicant data
             $geo_list = BdGeo::getGeoList();
-
             $applicant_data = [
                 'division' => json_encode([
                     'id' => $request->division_id,
@@ -103,50 +109,61 @@ class AdminApplicantController extends Controller
 
             $applicant->update($applicant_data);
 
-            if (count($request->exam)) {
-                $applicant->exams()->delete();
-                \DB::table('applicant_exam')->whereApplicantId($applicant->id)->delete();
-
-                foreach ($request->exam as $index => $exam_id) {
+            // Update Applicant's exam data
+            foreach ($request->exam as $index => $exam_id) {
+                // Check sequential institute and result
+                if (array_key_exists($index, $data['institute'])
+                    && array_key_exists($index, $data['result'])
+                ) {
                     $exam = Exam::find($exam_id);
+                    $institute = \DB::table(\Str::plural($exam->level))
+                                    ->whereId($data['institute'][$index])
+                                    ->first();
 
-                    if (isset($exam)) {
-                        $institute = \DB::table(\Str::plural($exam->level))
-                                        ->whereId($request->institute[$index])
-                                        ->first();
-
-                        if (isset($institute)
-                            && is_array($request->result)
-                            && array_key_exists($index, $request->result)
-                            && is_numeric($request->result[$index])
-                        ) {
-                            $applicant->exams()->attach($exam_id, [
-                                'institute_type' => $exam->level,
-                                'institute_id' => $institute->id,
-                                'result' => $request->result[$index],
-                            ]);
+                    // Check valid institute
+                    if (isset($institute)) {
+                        if ($applicant_exams_count == 0) {
+                            \DB::table('applicant_exam')->whereApplicantId($applicant->id)->delete();
                         }
+
+                        $applicant->exams()->attach($exam_id, [
+                            'institute_type' => $exam->level,
+                            'institute_id' => $institute->id,
+                            'result' => $data['result'][$index],
+                        ]);
+
+                        $applicant_exams_count++;
                     }
                 }
             }
 
-            if ($request->training && count($request->training_name)) {
-                $applicant->trainings()->delete();
-
+            // Update Applicant's trainings data
+            if ($request->training) {
                 foreach ($request->training_name as $key => $training) {
                     if (isset($training) && $training !== null && $training !== '') {
+                        if ($applicant_trainings_count == 0) {
+                            $applicant->trainings()->delete();
+                        }
+
                         $applicant->trainings()->create([
                             'name' => $training,
-                            'details' => $request->training_details[$key],
+                            'details' => $data['training_details'][$key],
                         ]);
+
+                        $applicant_trainings_count++;
                     }
                 }
+            } else {
+                $applicant->trainings()->delete();
             }
 
             return response()->json(['status' => true]);
-        } else {
-            return response()->json(['status' => false, 'data' => $request->all(), 'errors' => $validation->getMessageBag()->toArray()]);
         }
+
+        return response()->json([
+            'status' => false,
+            'errors' => $validation->getMessageBag()->toArray(),
+        ]);
     }
 
     /**

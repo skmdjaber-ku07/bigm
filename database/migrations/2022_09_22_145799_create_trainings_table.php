@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('trainings', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('details');
+            $table->string('details')->nullable();
             $table->foreignId('applicant_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

@@ -35,36 +35,13 @@
                     </select>
                 </td>
                 <td>
-                    {{ Form::text('result[]', $applicant_exam->pivot->result, ['class' => 'form-control']) }}
+                    {{ Form::number('result[]', $applicant_exam->pivot->result, ['class' => 'form-control', 'step' => '0.01', 'max' => 5]) }}
                 </td>
                 <td>
-                    <button class="btn btn-light btn-sm @if($index > 1) remove-tr @endif" @if($index <= 1) disabled @endif>X</button>
+                    <button class="btn btn-light btn-sm @if($index > 0) remove-tr @endif" @if($index == 0) disabled @endif>X</button>
                 </td>
             </tr>
         @endforeach
-
-        @if($applicant->exams()->count() == 1)
-            <tr>
-                <td>
-                    <select name="exam[]" class="form-control">
-                        <option value="">Select Exam</option>
-
-                        @foreach($data['exams_list'] as $exam)
-                            <option value="{{ $exam->id }}" level="{{ $exam->level }}">{{ $exam->name }}</option>
-                        @endforeach
-                    </select>
-                </td>
-                <td>
-                    {{ Form::select('institute[]', ['' => '--'], null, ['class' => 'form-control', 'disabled' => true]) }}
-                </td>
-                <td>
-                    {{ Form::text('result[]', '', ['class' => 'form-control']) }}
-                </td>
-                <td>
-                    <button class="btn btn-light btn-sm" disabled>X</button>
-                </td>
-            </tr>
-        @endif
     @else
         <tr>
             <td>
@@ -80,28 +57,7 @@
                 {{ Form::select('institute[]', ['' => '--'], null, ['class' => 'form-control', 'disabled' => true]) }}
             </td>
             <td>
-                {{ Form::text('result[]', '', ['class' => 'form-control']) }}
-            </td>
-            <td>
-                <button class="btn btn-light btn-sm" disabled>X</button>
-            </td>
-        </tr>
-
-        <tr>
-            <td>
-                <select name="exam[]" class="form-control">
-                    <option value="">Select Exam</option>
-
-                    @foreach($data['exams_list'] as $exam)
-                        <option value="{{ $exam->id }}" level="{{ $exam->level }}">{{ $exam->name }}</option>
-                    @endforeach
-                </select>
-            </td>
-            <td>
-                {{ Form::select('institute[]', ['' => '--'], null, ['class' => 'form-control', 'disabled' => true]) }}
-            </td>
-            <td>
-                {{ Form::text('result[]', '', ['class' => 'form-control']) }}
+                {{ Form::number('result[]', null, ['class' => 'form-control', 'step' => '0.01', 'max' => 5]) }}
             </td>
             <td>
                 <button class="btn btn-light btn-sm" disabled>X</button>
