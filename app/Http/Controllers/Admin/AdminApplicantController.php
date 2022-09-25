@@ -82,7 +82,7 @@ class AdminApplicantController extends Controller
 
             $geo_list = BdGeo::getGeoList();
 
-            $applicant->update([
+            $applicant_data = [
                 'division' => json_encode([
                     'id' => $request->division_id,
                     'name' => $geo_list['dropdown']['divisions'][(int) $request->division_id],
@@ -97,7 +97,11 @@ class AdminApplicantController extends Controller
                 ]),
                 'address_details' => $request->address_details,
                 'language' => json_encode($request->language),
-            ]);
+            ];
+
+            $applicant_data = Applicant::uploadFile($request, $applicant_data, $applicant);
+
+            $applicant->update($applicant_data);
 
             if (count($request->exam)) {
                 $applicant->exams()->delete();

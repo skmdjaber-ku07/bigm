@@ -109,3 +109,17 @@ $(document).ready( function () {
         $.ajax(ajaxArg);
     });
 });
+
+function previewImage (inputImgFile) {
+    var imgFile = $(inputImgFile).get(0).files[0];
+
+    if (imgFile) {
+        var reader = new FileReader();
+
+        reader.onload = function () {
+            $(inputImgFile).closest('.row').find('.img-thumbnail').attr('src', reader.result);
+        }
+
+        reader.readAsDataURL(imgFile);
+    }
+}

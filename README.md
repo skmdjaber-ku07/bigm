@@ -1,6 +1,11 @@
 ## Installation
 
-+ Server Requirements: PHP 8.1.6 or higher, MySQL 5.1+
++ Server Requirements:
+    + PHP 8.1.6 or higher
+    + MySQL 5.1+
+    + MySQLi Extension
+    + PHP GD Library
+    + PHP Fileinfo extension
 + Download the (https://github.com/skmdjaber-ku07/bigm/archive/master.zip) package from Github.
 + Or clone the repo: git clone https://github.com/skmdjaber-ku07/bigm.git
 + Update composer packages: composer update

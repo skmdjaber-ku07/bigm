@@ -58,11 +58,47 @@ class Applicant extends Model
             'upazila_id' => 'required|in:' . BdGeo::getCommaSeparatedIds('upazilas', [$data['district_id']]),
             'address_details' => 'required',
             'language' => 'array|in:bangla,english,french',
-            'exam' => 'required|array|exists:exams,id',
-            'institute' => 'required|array',
+            // 'exam' => 'required|array|exists:exams,id',
+            // 'institute' => 'required|array',
             'photo' => 'image|mimetypes:image/webp,image/jpeg,image/png,image/jpg,image/gif|max:3072',
             'cv' => 'mimes:doc,pdf|max:3072',
         ]);
+    }
+
+    /**
+     * Upload file type attributes
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param array $db_data
+     * @param NULL|\App\Models\Applicant $applicant
+     *
+     * @return array
+     */
+    public static function uploadFile($request, $db_data, $applicant = null)
+    {
+        $file_attributes = ['photo', 'cv'];
+
+        foreach ($file_attributes as $file_attribute) {
+            if ($request->has($file_attribute)) {
+                $file = $request->file($file_attribute);
+                $file_name = time() . '_' . \Str::random(10) . '_' . $file->getClientOriginalName();
+                $db_data[$file_attribute] = 'uploads/' . $file_attribute . '/' . $file_name;
+
+                // Upload new one
+                if ($file_attribute == 'photo') {
+                    \Image::make($file)->fit(200, 200)->save(public_path($db_data['photo']));
+                } else {
+                    $file->move(public_path('uploads/' . $file_attribute . '/'), $file_name);
+                }
+
+                // Delete old one
+                if (! is_null($applicant)) {
+                    \File::delete(public_path($applicant->$file_attribute));
+                }
+            }
+        }
+
+        return $db_data;
     }
 
     /**

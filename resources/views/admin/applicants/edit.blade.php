@@ -10,7 +10,7 @@
                 <div class="card-body">
                     {!! Form::model($applicant, ['route' => ['admin.applicants.update', $applicant->id], 'method' => 'put', 'files' => true, 'id' => 'page-form']) !!}
                         <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
+                            <label for="name" class="col-md-3 col-form-label text-md-end">{{ __('Name') }}</label>
 
                             <div class="col-md-6">
                                 {{ Form::text('name', null, ['id' => 'name', 'class' => 'form-control', "autocomplete" => "name", "required" => true, "autofocus" => true]) }}
@@ -24,7 +24,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+                            <label for="email" class="col-md-3 col-form-label text-md-end">{{ __('Email Address') }}</label>
 
                             <div class="col-md-6">
                                 {{ Form::email('email', null, ['id' => 'email', 'class' => 'form-control', "autocomplete" => "email", "required" => true]) }}
@@ -38,10 +38,10 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="photo" class="col-md-4 col-form-label text-md-end">Photo</label>
+                            <label for="photo" class="col-md-3 col-form-label text-md-end">Photo</label>
 
                             <div class="col-md-6">
-                                {{ Form::file('photo', ['accept' => 'image/x-png, image/gif, image/jpeg', 'class' => 'form-control']) }}
+                                {{ Form::file('photo', ['accept' => 'image/x-png, image/gif, image/jpeg', 'class' => 'form-control', 'onchange' => 'previewImage(this)']) }}
 
                                 @error('photo')
                                     <span class="invalid-feedback" role="alert">
@@ -49,10 +49,16 @@
                                     </span>
                                 @enderror
                             </div>
+
+                            <div class="col-md-2 position-relative">
+                                <img src="{{ $applicant->photo ? asset($applicant->photo) : 'https://gravatar.com/avatar/9095ca04f14b3ec92563039e7864223e?s=200&d=mp&r=x' }}"
+                                     alt="{{ $applicant->name }}"
+                                     class="img-fluid img-thumbnail position-absolute bottom-0 end-0 avatar">
+                            </div>
                         </div>
 
                         <div class="row mb-3">
-                            <label for="division" class="col-md-4 col-form-label text-md-end">Division</label>
+                            <label for="division" class="col-md-3 col-form-label text-md-end">Division</label>
 
                             <div class="col-md-6">
                                 {{ Form::select('division_id', ['' => 'Select Division'] + $data['dropdown']['divisions'], null, ['id' => 'division', 'class' => 'form-control', 'data-dropdown-child' => 'district_id']) }}
@@ -66,7 +72,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="district" class="col-md-4 col-form-label text-md-end">District</label>
+                            <label for="district" class="col-md-3 col-form-label text-md-end">District</label>
 
                             <div class="col-md-6">
                                 <select name="district_id" id="district" class="form-control" data-dropdown-child="upazila_id">
@@ -92,7 +98,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="upazila" class="col-md-4 col-form-label text-md-end">Upazila / tdana</label>
+                            <label for="upazila" class="col-md-3 col-form-label text-md-end">Upazila / tdana</label>
 
                             <div class="col-md-6">
                                 <select name="upazila_id" id="upazila" class="form-control">
@@ -117,7 +123,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="address_details" class="col-md-4 col-form-label text-md-end">Address Details</label>
+                            <label for="address_details" class="col-md-3 col-form-label text-md-end">Address Details</label>
 
                             <div class="col-md-6">
                                 {{ Form::textarea('address_details', null, ['id' => 'address_details', 'class' => 'form-control', "autocomplete" => "address_details", "required" => true, 'rows' => 3]) }}
@@ -131,7 +137,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="language" class="col-md-4 col-form-label text-md-end">Language</label>
+                            <label for="language" class="col-md-3 col-form-label text-md-end">Language</label>
 
                             <div class="col-md-6">
                                 <div class="form-check inline-block">
@@ -164,7 +170,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="education" class="col-md-4 col-form-label text-md-end">Education Qualification</label>
+                            <label for="education" class="col-md-3 col-form-label text-md-end">Education Qualification</label>
 
                             <div class="col-md-6">
                                 @include('admin.applicants.partials.exams_form')
@@ -178,7 +184,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="cv" class="col-md-4 col-form-label text-md-end">CV Attachment</label>
+                            <label for="cv" class="col-md-3 col-form-label text-md-end">CV Attachment</label>
 
                             <div class="col-md-6">
                                 {{ Form::file('cv', ['accept' => 'application/msword, application/pdf', 'class' => 'form-control']) }}
@@ -192,7 +198,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="training" class="col-md-4 col-form-label text-md-end">Training</label>
+                            <label for="training" class="col-md-3 col-form-label text-md-end">Training</label>
 
                             <div class="col-md-6">
                                 <div class="form-check inline-block">
@@ -258,7 +264,7 @@
                         </div>
 
                         <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
+                            <div class="col-md-6 offset-md-3">
                                 <button type="submit" class="submit btn btn-primary">
                                     Update
                                 </button>

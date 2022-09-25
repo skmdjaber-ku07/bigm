@@ -53,8 +53,10 @@ class AppRefresh extends Command
         fwrite($log_file, '');
         fclose($log_file);
 
-        $clear_sessions = $this->storageClear('framework/sessions');
-        $clear_uploads  = $this->storageClear('app/public');
+        $this->storageClear('framework/sessions');
+        $this->storageClear('app/public');
+        $this->publicClear('uploads/cv');
+        $this->publicClear('uploads/photo');
 
         // Artisan::call('config:cache');
     }
@@ -65,7 +67,7 @@ class AppRefresh extends Command
      * @param string $directory Specific directory in storage
      * @param array  $keep      Don't delete and keep those array files
      *
-     * @return bool
+     * @return void
      */
     public function storageClear($directory, $keep = ['.gitignore', 'installed'])
     {
@@ -82,8 +84,6 @@ class AppRefresh extends Command
                 }
             }
         }
-
-        return true;
     }
 
     /**
@@ -92,7 +92,7 @@ class AppRefresh extends Command
      * @param string $directory Specific directory in public
      * @param array  $keep      Don't delete and keep those array files
      *
-     * @return bool
+     * @return void
      */
     public function publicClear($directory, $keep = ['.gitignore'])
     {
@@ -109,7 +109,5 @@ class AppRefresh extends Command
                 }
             }
         }
-
-        return true;
     }
 }
