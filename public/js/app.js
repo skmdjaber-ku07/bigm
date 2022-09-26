@@ -122,7 +122,18 @@ $(document).ready( function () {
                         $("#page-form input").addClass("is-valid").removeClass("is-invalid");
                         $("#page-form select").addClass("is-valid").removeClass("is-invalid");
 
-                        $.notify({ message: 'Update was successful' }, defaultNotifyConfig('success'));
+                        if (data.reset) {
+                            $("#page-form input").removeClass("is-valid");
+                            $("#page-form select").removeClass("is-valid");
+                            $("#page-form .img-thumbnail").attr("src", $("#page-form .img-thumbnail").attr("default-src"));
+                            $("#page-form table").each(function(index, el) {
+                                $(el).find("tr:gt(1)").remove();
+                            });
+                            $(form).find('.table-container').slideUp();
+                            $(form).trigger('reset');
+                        }
+
+                        $.notify({ message: data.message }, defaultNotifyConfig('success'));
                     } else {
                         $.each(data.errors, function (index, value) {
                             $("input[name='" + index + "']").addClass("is-invalid").removeClass("is-valid");
@@ -179,9 +190,6 @@ $(document).ready( function () {
             upazila_id: {
                 required: true,
                 digits: true
-            },
-            address_details: {
-                maxlength: 255
             },
             "exam[]": {
                 required: true,

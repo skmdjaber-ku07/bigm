@@ -52,12 +52,7 @@ class AdminApplicantController extends Controller
      */
     public function edit(Applicant $applicant)
     {
-        $data = BdGeo::getGeoList();
-        $data['exams_list'] = Exam::select('name', 'id', 'level')->get();
-        $data['boards_list'] = Board::pluck('name', 'id')->prepend('Select Board', '');
-        $data['universities_list'] = University::pluck('name', 'id')->prepend('Select University', '');
-
-        return view('admin.applicants.edit', compact('applicant', 'data'));
+        return view('admin.applicants.edit', compact('applicant'));
     }
 
     /**
@@ -157,23 +152,12 @@ class AdminApplicantController extends Controller
                 $applicant->trainings()->delete();
             }
 
-            return response()->json(['status' => true]);
+            return response()->json(['status' => true, 'message' => 'Update was successful', 'reset' => false]);
         }
 
         return response()->json([
             'status' => false,
             'errors' => $validation->getMessageBag()->toArray(),
         ]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Applicant  $applicant
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Applicant $applicant)
-    {
-        //
     }
 }

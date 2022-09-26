@@ -42,16 +42,18 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a href="{{ route('home') }}" class="nav-link  {{ request()->path() == 'home' ? 'active' : '' }}">
-                                Home
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.applicants.index') }}" class="nav-link {{ request()->is('admin/applicants*') == 'applicants' ? 'active' : '' }}">
-                                Applicants
-                            </a>
-                        </li>
+                        @auth
+                            <li class="nav-item">
+                                <a href="{{ route('home') }}" class="nav-link  {{ request()->path() == 'home' ? 'active' : '' }}">
+                                    Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('admin.applicants.index') }}" class="nav-link {{ request()->is('admin/applicants*') == 'applicants' ? 'active' : '' }}">
+                                    Applicants
+                                </a>
+                            </li>
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->

@@ -52,7 +52,7 @@ class Applicant extends Model
     {
         return validator($data, [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|unique:users,email|max:255',
             'division_id' => 'required|in:' . BdGeo::getCommaSeparatedIds('divisions'),
             'district_id' => 'required|in:' . BdGeo::getCommaSeparatedIds('districts', [$data['division_id']]),
             'upazila_id' => 'required|in:' . BdGeo::getCommaSeparatedIds('upazilas', [$data['district_id']]),

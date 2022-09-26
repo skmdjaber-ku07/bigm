@@ -39,9 +39,13 @@ input[type=number] {
 }
 
 form table {
-    margin-bottom: 3px!important;
+    margin-bottom: 5px!important;
 }
 
 .mr-7 {
     margin-right: 7px;
+}
+
+form .img-thumbnail {
+    max-height: 185px;
 }
