@@ -94,9 +94,10 @@ $(document).ready( function () {
     });
 
     $("#page-form").validate({
-        // errorElement: 'em',
+        errorElement: 'i',
         errorPlacement: function (error, element) {
-            // here make change
+            error.appendTo(element.next("span"));
+            $(".invalid-feedback[data-error='" + element.attr('name').replace('[]', '') + "']").html(error).show();
         },
         highlight: function (element) {
              $(element).addClass("is-invalid").removeClass("is-valid");

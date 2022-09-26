@@ -49,3 +49,7 @@ form table {
 form .img-thumbnail {
     max-height: 185px;
 }
+
+.invalid-feedback i {
+    font-style: normal;
+}
