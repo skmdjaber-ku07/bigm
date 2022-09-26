@@ -67,6 +67,23 @@ $(document).ready( function () {
         table.find('tr:last-child td:last-child button').addClass('remove-tr');
         table.find("tr:last-child select").val("").trigger('change');
         table.find("tr:last-child input").val("");
+
+        // Validate class removed and set to default
+        table.find("tr:last-child select").removeClass('is-valid');
+        table.find("tr:last-child select").removeClass('is-invalid');
+        table.find("tr:last-child input").removeClass('is-valid');
+        table.find("tr:last-child input").removeClass('is-invalid');
+
+        // All array field will have unique #ID
+        $('#' + $(this).data('table') + ' tr').each(function(index, trEl) {
+            $(trEl).find('select').each(function(selectIndex, selectEl) {
+                $(selectEl).attr('id', $(selectEl).attr('name').replace('[]', '') + '-' + index);
+            });
+
+            $(trEl).find('input').each(function(inputIndex, inputEl) {
+                $(inputEl).attr('id', $(inputEl).attr('name').replace('[]', '') + '-' + index);
+            });
+        });
     });
 
     // Remove table tr
@@ -76,9 +93,113 @@ $(document).ready( function () {
         $(this).closest('tr').remove();
     });
 
+    $("#page-form").validate({
+        // errorElement: "span class='invalid-feedback fw-bold' role='alert'",
+        errorPlacement: function (error, element) {
+            // errorInsert = "#" + element.attr("name") + "Error";
+            // error.appendTo(errorInsert);
+        },
+        highlight: function (element) {
+             $(element).addClass("is-invalid").removeClass("is-valid");
+        },
+        unhighlight: function (element) {
+            $(element).addClass("is-valid").removeClass("is-invalid");
+        },
+        submitHandler: function (form) {
+            $(form).ajaxSubmit();
+            // // var form = $(this).closest('form');
+            // var formUrl = form.prop('action');
+            // var enctype = (typeof form.attr('enctype') != 'undefined');
+            // var formData = enctype ? new FormData($(form).get(0)) : form.serialize();
+
+            // var ajaxArg = {
+            //     type: 'POST',
+            //     url: formUrl,
+            //     data: formData,
+            //     dataType: 'JSON',
+            //     success: function (data) {
+            //         if (data.status === true) {
+
+            //         } else {
+
+            //         }
+            //     },
+            //     error: function (jqXHR, textStatus, errorThrown) {
+
+            //     }
+            // };
+
+            // if (enctype) {
+            //     ajaxArg.processData = false;
+            //     ajaxArg.contentType = false;
+            // }
+
+            // $(form).ajaxSubmit(ajaxArg);
+            // // $.ajax(ajaxArg);
+
+            return false;
+        },
+        rules: {
+            name: {
+                required: true,
+                minlength: 3,
+                maxlength: 255
+            },
+            email: {
+                required: true,
+                email: true,
+                maxlength: 255
+            },
+            division_id: {
+                required: true,
+                digits: true
+            },
+            district_id: {
+                required: true,
+                digits: true
+            },
+            upazila_id: {
+                required: true,
+                digits: true
+            },
+            address_details: {
+                maxlength: 255
+            },
+            "exam[]": {
+                required: true,
+                digits: true
+            },
+            "institute[]": {
+                required: true,
+                digits: true
+            },
+            "result[]": {
+                required: true,
+                number: true
+            },
+            training: {
+                required: true,
+                digits: true
+            },
+            "training_name": {
+                required: {
+                    depends: function (element) {
+                        return $("input[name='training']").val() == 1;
+                    }
+                }
+            },
+            photo: {
+                accept: "image/*"
+            },
+            cv: {
+                accept: "application/pdf,application/doc,application/docx"
+            }
+        }
+    });
+
+    /*
     $("#page-form *[type='submit']").on('click', function (e) {
         e.preventDefault();
-
         var form = $(this).closest('form');
         var formUrl = form.prop('action');
         var enctype = (typeof form.attr('enctype') != 'undefined');
@@ -108,6 +229,7 @@ $(document).ready( function () {
 
         $.ajax(ajaxArg);
     });
+    */
 });
 
 function previewImage (inputImgFile) {

@@ -14,12 +14,7 @@
 
                             <div class="col-md-6">
                                 {{ Form::text('name', null, ['id' => 'name', 'class' => 'form-control', "autocomplete" => "name", "required" => true, "autofocus" => true]) }}
-
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <span class="invalid-feedback" role="alert"><strong></strong></span>
                             </div>
                         </div>
 
@@ -28,12 +23,7 @@
 
                             <div class="col-md-6">
                                 {{ Form::email('email', null, ['id' => 'email', 'class' => 'form-control', "autocomplete" => "email", "required" => true]) }}
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <span class="invalid-feedback" role="alert"><strong></strong></span>
                             </div>
                         </div>
 
@@ -42,12 +32,7 @@
 
                             <div class="col-md-6">
                                 {{ Form::file('photo', ['accept' => 'image/x-png, image/gif, image/jpeg', 'class' => 'form-control', 'onchange' => 'previewImage(this)']) }}
-
-                                @error('photo')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <span class="invalid-feedback" role="alert"><strong></strong></span>
                             </div>
 
                             <div class="col-md-2 position-relative">
@@ -62,12 +47,7 @@
 
                             <div class="col-md-6">
                                 {{ Form::select('division_id', ['' => 'Select Division'] + $data['dropdown']['divisions'], null, ['id' => 'division', 'class' => 'form-control', 'data-dropdown-child' => 'district_id']) }}
-
-                                @error('division_id')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <span class="invalid-feedback" role="alert"><strong></strong></span>
                             </div>
                         </div>
 
@@ -88,12 +68,7 @@
                                     @endforeach
                                 </select>
 
-
-                                @error('district_id')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <span class="invalid-feedback" role="alert"><strong></strong></span>
                             </div>
                         </div>
 
@@ -114,11 +89,7 @@
                                     @endforeach
                                 </select>
 
-                                @error('upazila_id')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <span class="invalid-feedback" role="alert"><strong></strong></span>
                             </div>
                         </div>
 
@@ -127,12 +98,7 @@
 
                             <div class="col-md-6">
                                 {{ Form::textarea('address_details', null, ['id' => 'address_details', 'class' => 'form-control', "autocomplete" => "address_details", "required" => true, 'rows' => 3]) }}
-
-                                @error('address_details')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <span class="invalid-feedback" role="alert"><strong></strong></span>
                             </div>
                         </div>
 
@@ -161,11 +127,7 @@
                                     </label>
                                 </div>
 
-                                @error('language')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <span class="invalid-feedback" role="alert"><strong></strong></span>
                             </div>
                         </div>
 
@@ -175,11 +137,7 @@
                             <div class="col-md-6">
                                 @include('admin.applicants.partials.exams_form')
 
-                                @error('education')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <span class="invalid-feedback" role="alert"><strong></strong></span>
                             </div>
                         </div>
 
@@ -194,12 +152,7 @@
 
                             <div class="col-md-6">
                                 {{ Form::file('cv', ['accept' => 'application/msword, application/pdf', 'class' => 'form-control']) }}
-
-                                @error('cv')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <span class="invalid-feedback" role="alert"><strong></strong></span>
                             </div>
                         </div>
 
@@ -233,10 +186,10 @@
                                             @foreach($applicant->trainings as $index => $applicant_training)
                                                 <tr>
                                                     <td>
-                                                        {{ Form::text('training_name[]', $applicant_training->name, ['class' => 'form-control']) }}
+                                                        {{ Form::text('training_name[]', $applicant_training->name, ['class' => 'form-control', 'id' => 'training_name-' . $index]) }}
                                                     </td>
                                                     <td>
-                                                        {{ Form::text('training_details[]', $applicant_training->details, ['class' => 'form-control']) }}
+                                                        {{ Form::text('training_details[]', $applicant_training->details, ['class' => 'form-control', 'id' => 'training_details-' . $index]) }}
                                                     </td>
                                                     <td>
                                                         <button class="btn btn-light btn-sm @if($index > 0) remove-tr @endif" @if($index == 0) disabled @endif>X</button>
@@ -246,10 +199,10 @@
                                         @else
                                             <tr>
                                                 <td>
-                                                    {{ Form::text('training_name[]', null, ['class' => 'form-control']) }}
+                                                    {{ Form::text('training_name[]', null, ['class' => 'form-control', 'id' => 'training_name-0']) }}
                                                 </td>
                                                 <td>
-                                                    {{ Form::text('training_details[]', null, ['class' => 'form-control']) }}
+                                                    {{ Form::text('training_details[]', null, ['class' => 'form-control', 'id' => 'training_details-0']) }}
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-light btn-sm" disabled>X</button>
@@ -261,11 +214,7 @@
                                     <p class="text-end add-more" data-table="training-table"><button class="btn btn-light btn-sm">Add More..</button></p>
                                 </div> <!-- .table-container -->
 
-                                @error('training')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <span class="invalid-feedback" role="alert"><strong></strong></span>
                             </div>
                         </div>
 
