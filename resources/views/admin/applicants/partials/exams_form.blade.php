@@ -68,4 +68,5 @@
 
 {{ Form::select('board', $data['boards_list'], null, ['id' => 'board', 'class' => 'd-none']) }}
 {{ Form::select('university', $data['universities_list'], null, ['id' => 'university', 'class' => 'd-none']) }}
+<span class="invalid-feedback fw-bold" role="alert" data-error="exam"></span>
 <p class="text-end add-more" data-table="exam-table"><button class="btn btn-light btn-sm">Add More..</button></p>

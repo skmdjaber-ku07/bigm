@@ -13,12 +13,10 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
-
-    {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js']) --}}
-
     <!-- Styles -->
     {{ HTML::style('https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css') }}
     {{ HTML::style('https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css') }}
+    {{ HTML::style('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css') }}
     {{ HTML::style('css/app.css') }}
 
     <!-- Scripts -->
@@ -26,8 +24,8 @@
     {{ HTML::script('https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js') }}
     {{ HTML::script('https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js') }}
     {{ HTML::script('https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js') }}
-    {{ HTML::script('https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js') }}
-    {{-- {{ HTML::script('js/jquery.validate.js') }} --}}
+    {{ HTML::script('js/bootstrap.notify.min.js') }}
+    {{ HTML::script('js/jquery.validate.min.js') }}
     {{ HTML::script('js/app.js') }}
 </head>
 <body>

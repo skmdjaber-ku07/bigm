@@ -14,7 +14,7 @@
 
                             <div class="col-md-6">
                                 {{ Form::text('name', null, ['id' => 'name', 'class' => 'form-control', "autocomplete" => "name", "required" => true, "autofocus" => true]) }}
-                                <span class="invalid-feedback" role="alert"><strong></strong></span>
+                                <span class="invalid-feedback fw-bold" role="alert"></span>
                             </div>
                         </div>
 
@@ -23,7 +23,7 @@
 
                             <div class="col-md-6">
                                 {{ Form::email('email', null, ['id' => 'email', 'class' => 'form-control', "autocomplete" => "email", "required" => true]) }}
-                                <span class="invalid-feedback" role="alert"><strong></strong></span>
+                                <span class="invalid-feedback fw-bold" role="alert"></span>
                             </div>
                         </div>
 
@@ -32,7 +32,7 @@
 
                             <div class="col-md-6">
                                 {{ Form::file('photo', ['accept' => 'image/x-png, image/gif, image/jpeg', 'class' => 'form-control', 'onchange' => 'previewImage(this)']) }}
-                                <span class="invalid-feedback" role="alert"><strong></strong></span>
+                                <span class="invalid-feedback fw-bold" role="alert"></span>
                             </div>
 
                             <div class="col-md-2 position-relative">
@@ -47,7 +47,7 @@
 
                             <div class="col-md-6">
                                 {{ Form::select('division_id', ['' => 'Select Division'] + $data['dropdown']['divisions'], null, ['id' => 'division', 'class' => 'form-control', 'data-dropdown-child' => 'district_id']) }}
-                                <span class="invalid-feedback" role="alert"><strong></strong></span>
+                                <span class="invalid-feedback fw-bold" role="alert"></span>
                             </div>
                         </div>
 
@@ -68,7 +68,7 @@
                                     @endforeach
                                 </select>
 
-                                <span class="invalid-feedback" role="alert"><strong></strong></span>
+                                <span class="invalid-feedback fw-bold" role="alert"></span>
                             </div>
                         </div>
 
@@ -89,7 +89,7 @@
                                     @endforeach
                                 </select>
 
-                                <span class="invalid-feedback" role="alert"><strong></strong></span>
+                                <span class="invalid-feedback fw-bold" role="alert"></span>
                             </div>
                         </div>
 
@@ -98,7 +98,7 @@
 
                             <div class="col-md-6">
                                 {{ Form::textarea('address_details', null, ['id' => 'address_details', 'class' => 'form-control', "autocomplete" => "address_details", "required" => true, 'rows' => 3]) }}
-                                <span class="invalid-feedback" role="alert"><strong></strong></span>
+                                <span class="invalid-feedback fw-bold" role="alert"></span>
                             </div>
                         </div>
 
@@ -127,7 +127,7 @@
                                     </label>
                                 </div>
 
-                                <span class="invalid-feedback" role="alert"><strong></strong></span>
+                                <span class="invalid-feedback fw-bold" role="alert"></span>
                             </div>
                         </div>
 
@@ -136,8 +136,6 @@
 
                             <div class="col-md-6">
                                 @include('admin.applicants.partials.exams_form')
-
-                                <span class="invalid-feedback" role="alert"><strong></strong></span>
                             </div>
                         </div>
 
@@ -152,7 +150,7 @@
 
                             <div class="col-md-6">
                                 {{ Form::file('cv', ['accept' => 'application/msword, application/pdf', 'class' => 'form-control']) }}
-                                <span class="invalid-feedback" role="alert"><strong></strong></span>
+                                <span class="invalid-feedback fw-bold" role="alert"></span>
                             </div>
                         </div>
 
@@ -211,16 +209,16 @@
                                         @endif
                                     </table>
 
+                                    <span class="invalid-feedback fw-bold" role="alert" data-error="training"></span>
+                                    <span class="invalid-feedback fw-bold" role="alert" data-error="training_name"></span>
                                     <p class="text-end add-more" data-table="training-table"><button class="btn btn-light btn-sm">Add More..</button></p>
                                 </div> <!-- .table-container -->
-
-                                <span class="invalid-feedback" role="alert"><strong></strong></span>
                             </div>
                         </div>
 
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-3">
-                                <button type="submit" class="submit btn btn-primary">
+                                <button type="submit" class="submit btn btn-primary mr-7">
                                     Update
                                 </button>
 

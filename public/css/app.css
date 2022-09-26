@@ -37,3 +37,11 @@ input::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
+
+form table {
+    margin-bottom: 3px!important;
+}
+
+.mr-7 {
+    margin-right: 7px;
+}
