@@ -6,22 +6,56 @@ $.ajaxSetup({
 });
 
 $(document).ready( function () {
-    $('#datatable').DataTable({
+    var tableColumns = [
+        {data: 'name'},
+        {data: 'email'},
+        {data: 'division_name'},
+        {data: 'district_name'},
+        {data: 'upazila_name'},
+        {data: 'insert_date'},
+        {data: 'action'},
+    ];
+
+    var dataTable = $('#datatable').DataTable({
+        dom: "<'row thead'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-10 filter text-end'>>" +
+             "<'row'<'col-sm-12't>>" +
+             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        searching: true,
+        language: {
+            lengthMenu: '_MENU_',
+        },
         processing: true,
         serverSide: true,
         ajax: {
-            'url': $('#datatable').data('url'),
-            'type': 'POST',
+            url: $('#datatable').data('url'),
+            type: 'POST',
+            data: function (d) {
+                $('.filter select, .filter input').each(function(index, el) {
+                    d[$(el).attr('name')] = $(el).val();
+                });
+            }
         },
-        columns: [
-            {data: 'name'},
-            {data: 'email'},
-            {data: 'division_name'},
-            {data: 'district_name'},
-            {data: 'upazila_name'},
-            {data: 'insert_date'},
-            {data: 'action'},
-        ],
+        columns: tableColumns,
+    });
+
+    var filterHtml = "<div class='col-md-2 d-md-inline-block'><input id='name' type='text' name='name' class='form-control' placeholder='Applicant Name'></div>" +
+                     "<div class='col-md-2 d-md-inline-block'><input id='email' type='email' name='email' class='form-control' placeholder='Email Address'></div>" +
+                     "<div class='col-md-2 d-md-inline-block'><select id='division_id' name='division_id' class='form-control' data-dropdown-child='district_id'></select></div>" +
+                     "<div class='col-md-2 d-md-inline-block'><select id='district_id' name='district_id' class='form-control' data-dropdown-child='upazila_id'></select></div>" +
+                     "<div class='col-md-2 d-md-inline-block'><select id='upazila_id' name='upazila_id' class='form-control'></select></div>";
+
+    $('.filter').html(filterHtml);
+
+    $('.filter select').each(function(index, el) {
+        $(el).html($('#table-filter select[name="' + $(el).attr('name') + '"]').html());
+    });
+
+    $('.filter select').change(function () {
+        dataTable.draw();
+    });
+
+    $('.filter input').on('keyup', function () {
+        dataTable.draw();
     });
 
     $('select[data-dropdown-child]').on('change', function (e) {
@@ -96,7 +130,7 @@ $(document).ready( function () {
     $("#page-form").validate({
         errorElement: 'i',
         errorPlacement: function (error, element) {
-            error.appendTo(element.next("span"));
+            element.next("span").html(error);
             $(".invalid-feedback[data-error='" + element.attr('name').replace('[]', '') + "']").html(error).show();
         },
         highlight: function (element) {
@@ -157,6 +191,7 @@ $(document).ready( function () {
                     }
 
                     $.notify({ message: errorMsg }, defaultNotifyConfig('danger'));
+                    $("#page-form button[type='submit']").attr('disabled', false);
                 }
             };
 

@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Models\Applicant;
-use App\Models\Exam;
-use App\Library\BdGeo;
+use App\Events\UserSaved;
+use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
@@ -64,68 +63,11 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        $data = $request->all();
-        $data['result'] = \Arr::map($request->result, function ($value, $key) {
-            return floatval($value);
-        });
-
-        $validation = Applicant::validate($data);
+        $validation = Applicant::validate($request->all());
 
          if ($validation->passes()) {
             event(new Registered($user = $this->create($request->all())));
-
-            $geo_list = BdGeo::getGeoList();
-            $applicant_data = [
-                'division' => json_encode([
-                    'id' => $request->division_id,
-                    'name' => $geo_list['dropdown']['divisions'][(int) $request->division_id],
-                ]),
-                'district' => json_encode([
-                    'id' => $request->district_id,
-                    'name' => $geo_list['dropdown']['districts'][(int) $request->district_id],
-                ]),
-                'upazila' => json_encode([
-                    'id' => $request->upazila_id,
-                    'name' => $geo_list['dropdown']['upazilas'][(int) $request->upazila_id],
-                ]),
-                'address_details' => $request->address_details,
-                'language' => json_encode($request->language),
-            ];
-
-            $applicant_data = Applicant::uploadFile($request, $applicant_data);
-            $applicant = $user->applicant()->create($applicant_data);
-
-            foreach ($request->exam as $index => $exam_id) {
-                // Check sequential institute and result
-                if (array_key_exists($index, $data['institute'])
-                    && array_key_exists($index, $data['result'])
-                ) {
-                    $exam = Exam::find($exam_id);
-                    $institute = \DB::table(\Str::plural($exam->level))
-                                    ->whereId($data['institute'][$index])
-                                    ->first();
-
-                    // Check valid institute
-                    if (isset($institute)) {
-                        $applicant->exams()->attach($exam_id, [
-                            'institute_type' => $exam->level,
-                            'institute_id' => $institute->id,
-                            'result' => $data['result'][$index],
-                        ]);
-                    }
-                }
-            }
-
-            if ($request->training) {
-                foreach ($request->training_name as $key => $training) {
-                    if (isset($training) && $training !== null && $training !== '') {
-                        $applicant->trainings()->create([
-                            'name' => $training,
-                            'details' => $data['training_details'][$key],
-                        ]);
-                    }
-                }
-            }
+            event(new UserSaved($request, $user));
 
             return response()->json(['status' => true, 'message' => 'Successfully saved!', 'reset' => true]);
         }

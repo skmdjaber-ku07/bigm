@@ -25,6 +25,6 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer('partials.applicant_form', 'App\Http\Composers\FormViewComposer@applicantForm');
+        View::composer(['partials.applicant_form', 'admin.applicants.index'], 'App\Http\Composers\FormViewComposer@applicantForm');
     }
 }

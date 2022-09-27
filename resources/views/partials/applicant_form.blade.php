@@ -25,7 +25,7 @@
     </div>
 
     <div class="col-md-2 position-relative">
-        <img src="{{ isset($applicant) && file_exists(public_path($applicant->photo)) ? asset($applicant->photo) : 'https://gravatar.com/avatar/9095ca04f14b3ec92563039e7864223e?s=200&d=mp&r=x' }}"
+        <img src="{{ isset($applicant) && ! empty($applicant->photo) && file_exists(public_path($applicant->photo)) ? asset($applicant->photo) : 'https://gravatar.com/avatar/9095ca04f14b3ec92563039e7864223e?s=200&d=mp&r=x' }}"
              alt="{{ isset($applicant) ? $applicant->name : null }}"
              default-src="https://gravatar.com/avatar/9095ca04f14b3ec92563039e7864223e?s=200&d=mp&r=x"
              class="img-fluid img-thumbnail position-absolute bottom-0 end-0 avatar">

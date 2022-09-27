@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Library\BdGeo;
 use App\Models\Applicant;
-use App\Models\Exam;
-use App\Models\Board;
-use App\Models\University;
+use App\Events\UserSaved;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -41,7 +38,33 @@ class AdminApplicantController extends Controller
      */
     public function data(Request $request)
     {
-        return \DataTables::of(Applicant::with('user')->latest()->get())->make(true);
+        return \DataTables::of(Applicant::with('user')->latest()->get())
+                        ->filter(function ($instance) use ($request) {
+                            $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                                $status = true;
+                                $text = ['name', 'email'];
+                                $select = ['division_id', 'district_id', 'upazila_id'];
+
+                                // Text type field filter
+                                foreach ($text as $key => $attribute) {
+                                    if ($request->has($attribute) && ! empty($request->$attribute)) {
+                                        $status = str_contains(strtolower($row[$attribute]), strtolower($request->$attribute));
+                                    }
+                                }
+
+                                // Dropdown type field filter
+                                foreach ($select as $key => $attribute) {
+                                    if ($request->has($attribute)
+                                        && ! empty($request->$attribute)
+                                        && $row[$attribute] != $request->$attribute
+                                    ) {
+                                        $status = false;
+                                    }
+                                }
+
+                                return $status;
+                            });
+                        })->make(true);
     }
 
     /**
@@ -64,14 +87,7 @@ class AdminApplicantController extends Controller
      */
     public function update(Request $request, Applicant $applicant)
     {
-        $data = $request->all();
-        $applicant_exams_count = 0;
-        $applicant_trainings_count = 0;
-        $data['result'] = \Arr::map($request->result, function ($value, $key) {
-            return floatval($value);
-        });
-
-        $validation = Applicant::validate($data);
+        $validation = Applicant::validate($request->all(), $applicant);
 
         // Update posted data if validation passes.
         if ($validation->passes()) {
@@ -81,76 +97,7 @@ class AdminApplicantController extends Controller
                 'email' => $request->email,
             ]);
 
-            // Update the applicant data
-            $geo_list = BdGeo::getGeoList();
-            $applicant_data = [
-                'division' => json_encode([
-                    'id' => $request->division_id,
-                    'name' => $geo_list['dropdown']['divisions'][(int) $request->division_id],
-                ]),
-                'district' => json_encode([
-                    'id' => $request->district_id,
-                    'name' => $geo_list['dropdown']['districts'][(int) $request->district_id],
-                ]),
-                'upazila' => json_encode([
-                    'id' => $request->upazila_id,
-                    'name' => $geo_list['dropdown']['upazilas'][(int) $request->upazila_id],
-                ]),
-                'address_details' => $request->address_details,
-                'language' => json_encode($request->language),
-            ];
-
-            $applicant_data = Applicant::uploadFile($request, $applicant_data, $applicant);
-
-            $applicant->update($applicant_data);
-
-            // Update Applicant's exam data
-            foreach ($request->exam as $index => $exam_id) {
-                // Check sequential institute and result
-                if (array_key_exists($index, $data['institute'])
-                    && array_key_exists($index, $data['result'])
-                ) {
-                    $exam = Exam::find($exam_id);
-                    $institute = \DB::table(\Str::plural($exam->level))
-                                    ->whereId($data['institute'][$index])
-                                    ->first();
-
-                    // Check valid institute
-                    if (isset($institute)) {
-                        if ($applicant_exams_count == 0) {
-                            \DB::table('applicant_exam')->whereApplicantId($applicant->id)->delete();
-                        }
-
-                        $applicant->exams()->attach($exam_id, [
-                            'institute_type' => $exam->level,
-                            'institute_id' => $institute->id,
-                            'result' => $data['result'][$index],
-                        ]);
-
-                        $applicant_exams_count++;
-                    }
-                }
-            }
-
-            // Update Applicant's trainings data
-            if ($request->training) {
-                foreach ($request->training_name as $key => $training) {
-                    if (isset($training) && $training !== null && $training !== '') {
-                        if ($applicant_trainings_count == 0) {
-                            $applicant->trainings()->delete();
-                        }
-
-                        $applicant->trainings()->create([
-                            'name' => $training,
-                            'details' => $data['training_details'][$key],
-                        ]);
-
-                        $applicant_trainings_count++;
-                    }
-                }
-            } else {
-                $applicant->trainings()->delete();
-            }
+            event(new UserSaved($request, $applicant->user, $applicant));
 
             return response()->json(['status' => true, 'message' => 'Update was successful', 'reset' => false]);
         }

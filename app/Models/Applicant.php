@@ -34,8 +34,11 @@ class Applicant extends Model
     protected $appends = [
         'name',
         'email',
+        'division_id',
         'division_name',
+        'district_id',
         'district_name',
+        'upazila_id',
         'upazila_name',
         'insert_date',
         'action',
@@ -45,14 +48,17 @@ class Applicant extends Model
      * Applicant form validation.
      *
      * @param array $data
+     * @param Null|App\Models\Applicant $applicant
      *
      * @return \Illuminate\Validation\Validator
      */
-    public static function validate($data)
+    public static function validate($data, $applicant = null)
     {
         return validator($data, [
             'name' => 'required|max:255',
-            'email' => 'required|email|unique:users,email|max:255',
+            'email' => is_null($applicant) ?
+                       'required|email|unique:users,email|max:255' :
+                       'required|email|unique:users,email,' . $applicant->user_id,
             'division_id' => 'required|in:' . BdGeo::getCommaSeparatedIds('divisions'),
             'district_id' => 'required|in:' . BdGeo::getCommaSeparatedIds('districts', [$data['division_id']]),
             'upazila_id' => 'required|in:' . BdGeo::getCommaSeparatedIds('upazilas', [$data['district_id']]),
@@ -132,7 +138,7 @@ class Applicant extends Model
      */
     public function getLangArrayAttribute()
     {
-        return json_decode($this->language);
+        return (array) json_decode($this->language);
     }
 
     /**

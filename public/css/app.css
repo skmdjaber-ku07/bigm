@@ -53,3 +53,16 @@ form .img-thumbnail {
 .invalid-feedback i {
     font-style: normal;
 }
+
+.filter .col-md-2,
+.filter .col-md-3,
+.filter .col-md-4,
+.filter .col-md-6 {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.thead select,
+.thead input {
+    margin-bottom: 5px;
+}

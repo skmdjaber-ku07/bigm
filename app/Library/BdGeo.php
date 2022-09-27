@@ -565,7 +565,7 @@ class BdGeo
         ['id' => 338, 'district_id' => 18, 'name' => 'Sariakandi'],
         ['id' => 339, 'district_id' => 18, 'name' => 'Shibganj'],
         ['id' => 340, 'district_id' => 18, 'name' => 'Sonatala'],
-        ['id' => 341, 'district_id' => 19, 'name' => 'Joypurhat S'],
+        ['id' => 341, 'district_id' => 19, 'name' => 'Joypurhat Sadar'],
         ['id' => 342, 'district_id' => 19, 'name' => 'Akkelpur'],
         ['id' => 343, 'district_id' => 19, 'name' => 'Kalai'],
         ['id' => 344, 'district_id' => 19, 'name' => 'Khetlal'],
