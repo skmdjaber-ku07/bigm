@@ -16,9 +16,9 @@
 
 ## DB Design
 
-+ users          : id, name, email, password, type (admin, applicant)
++ users          : id, name, email, password, type (admin | applicant)
 + applicants     : user_id, language, division, district, upazila, address_details, photo, cv, training
-+ exams          : id, name, level (school, college, university)
++ exams          : id, name, level (board | university)
 + universities   : id, name
 + boards         : id, name
 + applicant_exam : applicant_id, exam_id, institute_type (board, university), institute_id, result
@@ -35,7 +35,7 @@
 
 ## Route & Middleware
 
-(auth.type:admin) means Only users.type == 'admin' are allowed
+(auth.type:admin) means Only authenticated users.type == 'admin' are allowed
 
 ## Controller
 
