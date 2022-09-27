@@ -7,7 +7,7 @@
     + PHP GD Library
     + PHP Fileinfo extension
 + Download the (https://github.com/skmdjaber-ku07/bigm/archive/master.zip) package from Github.
-+ Or clone the repo: **git clone https://github.com/skmdjaber-ku07/bigm.git**
++ Or clone the repo: git clone https://github.com/skmdjaber-ku07/bigm.git
 + Update composer packages: **composer update**
 + Create .env file and configure database information.
 + Migrate and seed sample data into DB: **php artisan migrate:fresh --seed**
