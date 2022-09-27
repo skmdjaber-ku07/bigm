@@ -21,7 +21,7 @@
 + exams          : id, name, level (board | university)
 + universities   : id, name
 + boards         : id, name
-+ applicant_exam : applicant_id, exam_id, institute_type (board, university), institute_id, result
++ applicant_exam : applicant_id, exam_id, institute_type (board | university), institute_id, result
 + trainings      : id, applicant_id, name, details
 
 ## Model
