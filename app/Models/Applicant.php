@@ -92,13 +92,19 @@ class Applicant extends Model
             if ($request->has($file_attribute)) {
                 $file = $request->file($file_attribute);
                 $file_name = time() . '_' . \Str::random(10) . '_' . $file->getClientOriginalName();
+                $upload_path = public_path('uploads/' . $file_attribute . '/');
                 $db_data[$file_attribute] = 'uploads/' . $file_attribute . '/' . $file_name;
+
+                // Check directories and permissions.
+                if (! file_exists($upload_path)) {
+                    mkdir($upload_path, 0777, true);
+                }
 
                 // Upload new one
                 if ($file_attribute == 'photo') {
                     \Image::make($file)->fit(200, 200)->save(public_path($db_data['photo']));
                 } else {
-                    $file->move(public_path('uploads/' . $file_attribute . '/'), $file_name);
+                    $file->move($upload_path, $file_name);
                 }
 
                 // Delete old one
